@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:web_dash/screens/authenticate/dekstop/reserves/reserves_desktop_view.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +66,7 @@ class ReserveDesktopViewState extends State<ReserveDesktopView> {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
             spreadRadius: 0.2,
             blurRadius:20,
             offset: const Offset(10, 8),
@@ -80,20 +81,24 @@ class ReserveDesktopViewState extends State<ReserveDesktopView> {
 
             state = reserveView['state'].toString();
 
-            Color containerColor;
+            Gradient containerColor;
 
             switch (state) {
               case 'Expiró':
-                containerColor = Colors.orange;
+                containerColor =
+                statesMenu[1]['gradient'];
                 break;
               case 'Atendido':
-                containerColor = Colors.blue;
+                containerColor =
+                statesMenu[2]['gradient'];
                 break;
               case 'Cancelado':
-                containerColor = Colors.red;
+                containerColor =
+                statesMenu[3]['gradient'];
                 break;
               default:
-                containerColor = Colors.green[300]!;
+                containerColor =
+                statesMenu[0]['gradient'];
             }
 
             return Column(
@@ -110,11 +115,11 @@ class ReserveDesktopViewState extends State<ReserveDesktopView> {
                           width: 30,
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: Theme.of(context).textTheme.bodyLarge?.color
+                              color: Theme.of(context).colorScheme.onPrimary
                           ),
                           child: const Center(child: Padding(
                             padding: EdgeInsets.only(right: 3),
-                            child: Icon(Icons.arrow_back_ios_rounded),
+                            child: Icon(Icons.arrow_back_ios_rounded, size: 20,),
                           ))),
                     ),
                   ),
@@ -132,13 +137,11 @@ class ReserveDesktopViewState extends State<ReserveDesktopView> {
                             const Text(
                               'Reserva agendada',
                               style: TextStyle(
-                                  color: Colors.white,
                                   fontSize: 35,
                                   fontWeight: FontWeight.bold),
                             ),
                             const Text(
                               'Para el dia',
-                              style: TextStyle(color: Colors.white),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top: 5),
@@ -156,7 +159,7 @@ class ReserveDesktopViewState extends State<ReserveDesktopView> {
                           height: 15,
                           width: 15,
                           decoration: BoxDecoration(
-                            color: containerColor,
+                            gradient: containerColor,
                             shape: BoxShape.circle,
                           ),
                         ),
@@ -168,11 +171,11 @@ class ReserveDesktopViewState extends State<ReserveDesktopView> {
                   padding: const EdgeInsets.only(top: 20, right: 25, left: 25),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
+                      color: Theme.of(context).colorScheme.onPrimary,
                       borderRadius: BorderRadius.circular(5),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
+                          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
                           spreadRadius: 0.2,
                           blurRadius:20,
                           offset: const Offset(10, 8),
@@ -192,8 +195,7 @@ class ReserveDesktopViewState extends State<ReserveDesktopView> {
                                 child: Text(
                                   '${reserveView['name']} '
                                       '${reserveView['last_name']}',
-                                  style: TextStyle(
-                                    color: Theme.of(context).textTheme.bodyLarge?.color,
+                                  style: const TextStyle(
                                       fontWeight: FontWeight.bold, fontSize: 20),
                                 ),
                               ),
@@ -215,13 +217,11 @@ class ReserveDesktopViewState extends State<ReserveDesktopView> {
                                           child: InkWell(
                                               onTap: () => openWhatsapp(
                                                   context, phoneNumber),
-                                              child: Icon(Icons.phone, color: Theme.of(context).textTheme.bodyLarge?.color,)),
+                                              child: Icon(Icons.phone, color: Theme.of(context).textTheme.bodyMedium?.color, size: 20,)),
                                         ),
                                         Text(
                                             'Teléfono: ${reserveView['phone_number']}',
-                                        style: TextStyle(
-                                          color: Theme.of(context).textTheme.bodyLarge?.color,
-                                        ),),
+                                       ),
                                       ],
                                     ),
                                   ),
@@ -231,13 +231,11 @@ class ReserveDesktopViewState extends State<ReserveDesktopView> {
                                       children: [
                                         Padding(
                                           padding: const EdgeInsets.only(right: 5),
-                                          child: Icon(Icons.phone_android, color: Theme.of(context).textTheme.bodyLarge?.color),
+                                          child: Icon(Icons.phone_android, color: Theme.of(context).textTheme.bodyMedium?.color, size: 20,),
                                         ),
                                         Text(
                                             'Tipo de equipo: ${reserveView['equipment_type']}',
-                                        style: TextStyle(
-                                          color: Theme.of(context).textTheme.bodyLarge?.color,
-                                        ),),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -247,14 +245,13 @@ class ReserveDesktopViewState extends State<ReserveDesktopView> {
                                     child: Row(
                                       children: [
                                         Padding(
-                                          padding: const EdgeInsets.only(right: 5),
-                                          child: Icon(Icons.build, color: Theme.of(context).textTheme.bodyLarge?.color,),
+                                          padding: const EdgeInsets.only(right: 10),
+                                          child: Icon(Icons.build, color: Theme.of(context).textTheme.bodyMedium?.color, size: 18,),
                                         ),
                                         Text(
                                             'Falla: ${reserveView['falla_type']}',
-                                        style: TextStyle(
-                                          color: Theme.of(context).textTheme.bodyLarge?.color,
-                                        ),),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,),
                                       ],
                                     ),
                                   ),
@@ -274,7 +271,7 @@ class ReserveDesktopViewState extends State<ReserveDesktopView> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: statesMenu.map((state) {
                       String stateText = state['state'];
-                      Color stateColor = state['color'];
+                      Gradient stateColor = state['gradient'];
                       return InkWell(
                         onTap: () {
                           showDialog(
@@ -361,25 +358,44 @@ class ReserveDesktopViewState extends State<ReserveDesktopView> {
                             },
                           );
                         },
-                        child: Container(
+                        child: SizedBox(
                           height: 50,
                           width: 100,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
-                            borderRadius: BorderRadius.circular(5),
-                            border: Border.all(
-                              width: 1,
-                              color: stateColor,
-                            ),
-                          ),
-                          child: Center(
-                            child: Text(
-                              stateText,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Theme.of(context).textTheme.bodyLarge?.color,
+                          child: Stack(
+                            children: [
+                              Positioned.fill(
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Container(
+                                    height: 50,
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      gradient: stateColor,
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
+                              Positioned.fill(
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Container(
+                                    height: 47,
+                                    width: 97,
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).colorScheme.onPrimary,
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        stateText,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       );
@@ -495,16 +511,15 @@ class ReserveDesktopViewState extends State<ReserveDesktopView> {
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                           colors: [
-                            Theme.of(context).primaryColor,
-                            Theme.of(context).hintColor
+                            Theme.of(context).hintColor,
+                            Theme.of(context).colorScheme.onPrimary
                           ],
                         ),
                       ),
-                      child: Center(
+                      child: const Center(
                         child: Text('Eliminar',
                           style: TextStyle(
                               fontSize: 15,
-                              color: Theme.of(context).textTheme.bodyLarge?.color,
                               fontWeight: FontWeight.w500
                           ),
                         ),

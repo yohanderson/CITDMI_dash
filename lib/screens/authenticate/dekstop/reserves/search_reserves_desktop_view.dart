@@ -85,35 +85,34 @@ class SearchReservesDesktopViewState extends State<SearchReservesDesktopView> {
     return SizedBox(
       height: 50,
       width: 500,
-      child: TextField(
+      child: TextFormField(
         focusNode: _focusNode,
         controller: _searchcontroller,
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.only(left: 25, top: 5, bottom: 5, right: 25),
           floatingLabelBehavior: FloatingLabelBehavior.never,
-          fillColor: Theme.of(context).textTheme.bodyLarge?.color,
+          fillColor: Theme.of(context).colorScheme.primary,
           filled: true,
-          labelText: 'Nombre',
+          labelText: 'Buscar',
           labelStyle: TextStyle(
             fontSize: 18,
             color: Theme.of(context).hintColor,
           ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(50),
-            borderSide: BorderSide(color: Theme.of(context).colorScheme.primary,)
+          enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(50),
+              borderSide: BorderSide(color: Theme.of(context).hintColor,)
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50),
-            borderSide: BorderSide(color: Theme.of(context).hintColor,),
+            borderSide: BorderSide(color: Theme.of(context).primaryColor,),
           ),
         ),
-        style: TextStyle(
-          color: Theme.of(context).hintColor,
+        style: const TextStyle(
           fontSize: 20,
 
         ),
         minLines: 1,
-        cursorColor: Theme.of(context).hintColor,
+        cursorColor: Theme.of(context).primaryColor,
       ),
     );
 

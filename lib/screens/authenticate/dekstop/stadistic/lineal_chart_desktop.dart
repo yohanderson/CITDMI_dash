@@ -168,7 +168,7 @@ class LinealChartDesktopState extends State<LinealChartDesktop> {
           TextStyle style = TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 13,
-            color: Theme.of(context).textTheme.bodyLarge?.color,
+            color: Theme.of(context).textTheme.bodyMedium?.color,
           );
           String text;
           switch (value.toInt()) {
@@ -250,10 +250,10 @@ class LinealChartDesktopState extends State<LinealChartDesktop> {
                   child: Container(
                                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    color: Theme.of(context).textTheme.bodyMedium?.color
+                    color: Theme.of(context).colorScheme.onPrimary
                                 ),
                                 child: Padding(
-                  padding: const EdgeInsets.only(top: 1, bottom: 1, left: 10,right: 10),
+                  padding: const EdgeInsets.only(top: 1.5, bottom: 1.5, left: 10,right: 10),
                   child: Text(DateFormat('MMM d', 'es_ES').format(date), style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 13,
@@ -271,8 +271,8 @@ class LinealChartDesktopState extends State<LinealChartDesktop> {
                 color: date.day == DateTime.now().day &&
                     date.month == DateTime.now().month &&
                     date.year == DateTime.now().year
-                    ? Theme.of(context).textTheme.bodyMedium?.color
-                    : Theme.of(context).textTheme.bodyLarge?.color,
+                    ? Theme.of(context).textTheme.bodyLarge?.color
+                    : Theme.of(context).textTheme.bodyMedium?.color,
               ),),
             );
           } else {
@@ -288,12 +288,14 @@ class LinealChartDesktopState extends State<LinealChartDesktop> {
           return LineChartData(
             lineTouchData: LineTouchData(
               touchTooltipData: LineTouchTooltipData(
-                tooltipBgColor: Theme.of(context).hintColor,
+                tooltipBgColor: Theme.of(context).colorScheme.onPrimary,
                 getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
                   return touchedBarSpots.map((barSpot) {
                     return LineTooltipItem(
                       barSpot.y.toString(),
-                      TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                      TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).textTheme.bodyLarge?.color),
                     );
                   }).toList();
                 },
@@ -306,13 +308,13 @@ class LinealChartDesktopState extends State<LinealChartDesktop> {
               verticalInterval: 1,
               getDrawingHorizontalLine: (value) {
                 return FlLine(
-                  color: Colors.grey.withOpacity(0.1),
+                  color: Colors.grey.withOpacity(0.2),
                   strokeWidth: 1,
                 );
               },
               getDrawingVerticalLine: (value) {
                 return FlLine(
-                  color: Colors.grey.withOpacity(0.1),
+                  color: Colors.grey.withOpacity(0.2),
                   strokeWidth: 1,
                 );
               },
@@ -354,7 +356,7 @@ class LinealChartDesktopState extends State<LinealChartDesktop> {
                 spots: spots,
                 isCurved: true,
                 preventCurveOverShooting: true,
-                color: Theme.of(context).textTheme.bodyLarge?.color,
+                color: Theme.of(context).primaryColor,
                 barWidth: 2,
                 isStrokeCapRound: true,
                 dotData: FlDotData(
@@ -365,7 +367,7 @@ class LinealChartDesktopState extends State<LinealChartDesktop> {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white, Theme.of(context).colorScheme.primary]
+                    colors: [Theme.of(context).primaryColor, Theme.of(context).colorScheme.primary]
                         .map((color) => color.withOpacity(0.5))
                         .toList(),
                   ),
@@ -384,10 +386,10 @@ class LinealChartDesktopState extends State<LinealChartDesktop> {
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
-                spreadRadius: 0.2,
-                blurRadius:20,
-                offset: const Offset(10, 8),
+                color:
+                Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
+                blurRadius: 10,
+                offset: const Offset(3, 5),
               ),
             ],
           ),
@@ -416,8 +418,8 @@ class LinealChartDesktopState extends State<LinealChartDesktop> {
                       slideRange = value;
                       _updateCountsDates();
                     },
-                    activeColor: Theme.of(context).textTheme.bodyMedium?.color,
-                    inactiveColor: Theme.of(context).textTheme.bodyLarge?.color,
+                    activeColor: Theme.of(context).primaryColor,
+                    inactiveColor: Theme.of(context).hintColor,
                   ),
                 ),
               ),

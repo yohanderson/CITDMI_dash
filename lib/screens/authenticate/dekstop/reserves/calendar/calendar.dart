@@ -41,7 +41,7 @@ class _CalendarState extends State<Calendar> {
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.2),
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
                 spreadRadius: 0.2,
                 blurRadius:20,
                 offset: const Offset(10, 8),
@@ -94,13 +94,14 @@ class _CalendarState extends State<Calendar> {
             },
             calendarStyle: CalendarStyle(
               selectedDecoration: BoxDecoration(
-                  color: Colors.green[400],
+                  color: Theme.of(context).primaryColor,
                   shape: BoxShape.circle),
               todayDecoration: BoxDecoration(
-                  color: Colors.lightBlue[400],
+                  color: Theme.of(context).colorScheme.onPrimary,
                   shape: BoxShape.circle),
               todayTextStyle: TextStyle(
                 color: Theme.of(context).textTheme.bodyLarge?.color,
+                fontWeight: FontWeight.bold
               ),
               outsideTextStyle: const TextStyle(
                 color: Colors.grey,
@@ -109,25 +110,25 @@ class _CalendarState extends State<Calendar> {
                 color: Theme.of(context).textTheme.bodyLarge?.color,
               ),
               weekendTextStyle: TextStyle(
-                color: Colors.blue[400],
+                color: Theme.of(context).hintColor,
               ),
 
 
             ),
             daysOfWeekStyle: DaysOfWeekStyle(
               weekdayStyle: TextStyle(
-                color: Theme.of(context).hintColor,
+                color: Theme.of(context).primaryColor,
               ),
               weekendStyle: TextStyle(
-                color: Colors.blue[400],
+                color: Theme.of(context).hintColor,
               ),
             ),
             headerStyle: HeaderStyle(
               formatButtonVisible: false,
               titleCentered: true,
-              titleTextStyle: TextStyle(color: Theme.of(context).hintColor, fontSize: 25, fontWeight: FontWeight.w500),
-              leftChevronIcon: Icon(Icons.arrow_back_ios, color: Theme.of(context).hintColor, size: 25),
-              rightChevronIcon: Icon(Icons.arrow_forward_ios, color: Theme.of(context).hintColor, size: 25),
+              titleTextStyle: TextStyle(color: Theme.of(context).primaryColor, fontSize: 25, fontWeight: FontWeight.w500),
+              leftChevronIcon: Icon(Icons.arrow_back_ios, color: Theme.of(context).primaryColor, size: 25),
+              rightChevronIcon: Icon(Icons.arrow_forward_ios, color: Theme.of(context).primaryColor, size: 25),
             ),
           ),
         );

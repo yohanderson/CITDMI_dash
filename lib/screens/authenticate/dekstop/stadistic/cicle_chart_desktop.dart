@@ -76,9 +76,8 @@ class CircleChartDesktopState extends State<CircleChartDesktop> {
     // Si no hay datos, retorna una sección en blanco
     if (total == 0) {
       final isTouched = 0 == touchedIndex;
-      final fontSize = isTouched ? 14.0 : 18.0;
+      final fontSize = isTouched ? 18.0 : 14.0;
       final radius = isTouched ? 60.0 : 50.0;
-      const shadows = [Shadow(color: Colors.black, blurRadius: 1)];
 
       return [
         PieChartSectionData(
@@ -88,9 +87,8 @@ class CircleChartDesktopState extends State<CircleChartDesktop> {
           radius: radius,
           titleStyle: TextStyle(
             fontSize: fontSize ,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-            shadows: shadows,
+              fontWeight: FontWeight.w900,
+
           ),
         )
       ];
@@ -99,9 +97,8 @@ class CircleChartDesktopState extends State<CircleChartDesktop> {
     // Genera una sección para cada estado
     return List.generate(statesMenu.length, (i) {
       final isTouched = i == touchedIndex;
-      final fontSize = isTouched ? 14.0 : 18.0;
+      final fontSize = isTouched ? 18.0 : 14.0;
       final radius = isTouched ? 60.0 : 50.0;
-      const shadows = [Shadow(color: Colors.black, blurRadius: 1)];
 
       // Calcula el porcentaje para este estado
       final percentage = (statesMenu[i]['count'] / total * 100).toDouble();
@@ -118,9 +115,8 @@ class CircleChartDesktopState extends State<CircleChartDesktop> {
         radius: radius,
         titleStyle: TextStyle(
           fontSize: fontSize,
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-          shadows: shadows,
+          fontWeight: FontWeight.w900,
+
         ),
       );
     });
@@ -243,18 +239,12 @@ class CircleChartDesktopState extends State<CircleChartDesktop> {
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.primary,
             borderRadius: BorderRadius.circular(20),
-            boxShadow: const [
+            boxShadow: [
               BoxShadow(
-                offset: Offset(-20, -20),
-                blurRadius: 60,
-                color: Colors.white,
-                inset: true,
-              ),
-              BoxShadow(
-                offset: Offset(20, 20),
-                blurRadius: 60,
-                color: Color(0xFFBEBEBE),
-                inset: true,
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
+                spreadRadius: 0.2,
+                blurRadius:20,
+                offset: const Offset(10, 8),
               ),
             ],
           ),
@@ -283,7 +273,7 @@ class CircleChartDesktopState extends State<CircleChartDesktop> {
                           width: 510,
                           height: 40,
                           decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: Theme.of(context).colorScheme.onPrimary,
                               borderRadius: BorderRadius.circular(20)
                           ),
                           child: Row(
@@ -320,7 +310,7 @@ class CircleChartDesktopState extends State<CircleChartDesktop> {
                                             style: TextStyle(
                                                 color: date.day == DateTime.now().day &&
                                                     date.month == DateTime.now().month &&
-                                                    date.year == DateTime.now().year ? Theme.of(context).hintColor : Theme.of(context).colorScheme.onSurface,
+                                                    date.year == DateTime.now().year ? Theme.of(context).textTheme.bodyLarge?.color : Theme.of(context).textTheme.bodyMedium?.color,
                                                 fontSize: 15,
                                                 fontWeight: FontWeight.w500),
                                           ),
@@ -345,7 +335,7 @@ class CircleChartDesktopState extends State<CircleChartDesktop> {
                           builder: (context, dates, child) {
                             return Container(
                               decoration: BoxDecoration(
-                                  color: Theme.of(context).textTheme.bodyLarge?.color,
+                                  color: Theme.of(context).colorScheme.onPrimary,
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(20),
                                   topRight: Radius.circular(20)
@@ -357,7 +347,7 @@ class CircleChartDesktopState extends State<CircleChartDesktop> {
                                   DateFormat('MMMM yyyy', 'es_ES').format(dates),
                                   style: TextStyle(
                                     fontSize: 20,
-                                    color: Theme.of(context).hintColor,
+                                    color: Theme.of(context).textTheme.bodyLarge?.color,
                                     fontWeight: FontWeight.w500
                                   ),
                                 ),
@@ -381,16 +371,15 @@ class CircleChartDesktopState extends State<CircleChartDesktop> {
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                                 colors: [
-                                  Theme.of(context).primaryColor,
-                                  Theme.of(context).hintColor
+                                  Theme.of(context).hintColor,
+                                  Theme.of(context).colorScheme.onPrimary
                                 ],
                               ),
                             ),
-                            child: Center(
+                            child: const Center(
                               child: Text('Todo',
                                 style: TextStyle(
                                     fontSize: 15,
-                                    color: Theme.of(context).textTheme.bodyLarge?.color,
                                   fontWeight: FontWeight.w500
                                 ),
                               ),
@@ -415,16 +404,15 @@ class CircleChartDesktopState extends State<CircleChartDesktop> {
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                                 colors: [
-                                  Theme.of(context).primaryColor,
                                   Theme.of(context).hintColor,
+                                  Theme.of(context).colorScheme.onPrimary
                                 ],
                               ),
                             ),
-                            child: Center(
+                            child: const Center(
                               child: Text('Semana',
                                 style: TextStyle(
                                     fontSize: 15,
-                                    color: Theme.of(context).textTheme.bodyLarge?.color,
                                     fontWeight: FontWeight.w500
                                 ),),
                             ),
@@ -443,7 +431,7 @@ class CircleChartDesktopState extends State<CircleChartDesktop> {
                     Container(
                       width: 270,
                       decoration: BoxDecoration(
-                        color: Theme.of(context).textTheme.bodyLarge?.color,
+                        color: Theme.of(context).colorScheme.onPrimary,
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Row(
@@ -479,7 +467,7 @@ class CircleChartDesktopState extends State<CircleChartDesktop> {
                                         formattedDate,
                                         style: TextStyle(
                                             color: date.month == DateTime.now().month &&
-                                                date.year == DateTime.now().year ? Theme.of(context).hintColor : Theme.of(context).colorScheme.onSurface,
+                                                date.year == DateTime.now().year ?  Theme.of(context).textTheme.bodyLarge?.color : Theme.of(context).textTheme.bodyMedium?.color,
                                             fontSize: 15,
                                             fontWeight: FontWeight.w500),
                                       ),
@@ -515,7 +503,7 @@ class CircleChartDesktopState extends State<CircleChartDesktop> {
                     Container(
                       width: 230,
                       decoration: BoxDecoration(
-                        color: Theme.of(context).textTheme.bodyLarge?.color,
+                        color: Theme.of(context).colorScheme.onPrimary,
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Row(
@@ -548,7 +536,7 @@ class CircleChartDesktopState extends State<CircleChartDesktop> {
                                       child: Text(
                                         formattedDate,
                                         style: TextStyle(
-                                            color: year == DateTime.now().year ? Theme.of(context).hintColor : Theme.of(context).colorScheme.onSurface,
+                                            color: year == DateTime.now().year ?  Theme.of(context).textTheme.bodyLarge?.color : Theme.of(context).textTheme.bodyMedium?.color,
                                             fontSize: 15,
                                             fontWeight: FontWeight.w500
                                         ),
@@ -613,7 +601,7 @@ class CircleChartDesktopState extends State<CircleChartDesktop> {
                           height: 33,
                           width: 140,
                           decoration: BoxDecoration(
-                              color: Theme.of(context).textTheme.bodyLarge?.color,
+                              color: Theme.of(context).colorScheme.onPrimary,
                               borderRadius: BorderRadius.circular(8)
                           ),
                           child: Row(
@@ -640,7 +628,7 @@ class CircleChartDesktopState extends State<CircleChartDesktop> {
                                   child: Text('$totalCounts',
                                     style: TextStyle(
                                         fontSize: 18,
-                                        fontWeight: FontWeight.w700,
+                                        fontWeight: FontWeight.w900,
                                         color: Theme.of(context).textTheme.bodyLarge?.color
                                     ),
                                   ),
@@ -713,9 +701,8 @@ class Indicator extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
           ),
           child: Center(child: Text('$counts',
-          style: TextStyle(
-            color: Theme.of(context).textTheme.bodyLarge?.color,
-            fontWeight: FontWeight.w700,
+          style: const TextStyle(
+            fontWeight: FontWeight.w500,
             fontSize: 25
           ),)),
         ),
@@ -724,10 +711,9 @@ class Indicator extends StatelessWidget {
         ),
         Text(
           text,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: Theme.of(context).textTheme.bodyLarge?.color,
+            fontWeight: FontWeight.w500,
           ),
         )
       ],

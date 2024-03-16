@@ -9,9 +9,8 @@ class DayReserveDesktopView extends StatefulWidget {
   final ValueListenable<List<Map<String, dynamic>>> dates;
   final DateTime selectedDay;
   const DayReserveDesktopView(
-      {Key? key,
-      required this.selectedDay, required this.dates})
-      : super(key: key);
+      {super.key,
+      required this.selectedDay, required this.dates});
 
   @override
   State<DayReserveDesktopView> createState() => DayReserveDesktopViewState();
@@ -52,26 +51,18 @@ class DayReserveDesktopViewState extends State<DayReserveDesktopView> {
                 padding: const EdgeInsets.only(top: 10, bottom: 10),
                 child: Row(
                   children: [
-                    Text('Todo',
-                    style: TextStyle(
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyLarge
-                          ?.color,
-                    ),),
+                    const Text('Todo',
+                      ),
                     Padding(
                       padding: const EdgeInsets.only(left: 5),
                       child: Container(
                         height: 10,
                         width: 10,
                         decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
-                                ?.color, shape: BoxShape.circle,
+                             shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
+                              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
                               spreadRadius: 0.2,
                               blurRadius:20,
                               offset: const Offset(10, 8),
@@ -89,7 +80,7 @@ class DayReserveDesktopViewState extends State<DayReserveDesktopView> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: statesMenu.map((state) {
                 String stateText = state['state'];
-                Color stateColor = state['color'];
+                Gradient stateColor = state['gradient'];
                 return InkWell(
                   onTap: () {
                     setState(() {
@@ -108,12 +99,6 @@ class DayReserveDesktopViewState extends State<DayReserveDesktopView> {
                           Text(
                             stateText,
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge
-                                  ?.color,
-                            ),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left: 5),
@@ -122,7 +107,7 @@ class DayReserveDesktopViewState extends State<DayReserveDesktopView> {
                               width: 10,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: stateColor,
+                                gradient: stateColor,
                               ),
                             ),
                           )
@@ -146,7 +131,7 @@ class DayReserveDesktopViewState extends State<DayReserveDesktopView> {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
             spreadRadius: 0.2,
             blurRadius:20,
             offset: const Offset(10, 8),
@@ -170,18 +155,17 @@ class DayReserveDesktopViewState extends State<DayReserveDesktopView> {
                         width: 30,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Theme.of(context).textTheme.bodyLarge?.color
+                          color: Theme.of(context).colorScheme.onPrimary
                         ),
                         child: const Center(child: Padding(
                           padding: EdgeInsets.only(right: 3),
                           child: Icon(Icons.arrow_back_ios_rounded),
                         ))),
                     ),
-                    Text(
+                    const Text(
                       'Citas',
                       style: TextStyle(
                           fontSize: 35,
-                          color: Theme.of(context).textTheme.bodyLarge?.color,
                           fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(
@@ -204,19 +188,18 @@ class DayReserveDesktopViewState extends State<DayReserveDesktopView> {
                         }
                       });
                     },
-                    child: const SizedBox(
+                    child: SizedBox(
                       width: 100,
                       child: Row(
                         children: [
-                          Text(
+                          const Text(
                             'Estados',
-                            style: TextStyle(color: Colors.white),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(left: 10),
+                            padding: const EdgeInsets.only(left: 10),
                             child: Icon(
                               Icons.remove_red_eye_sharp,
-                              color: Colors.white,
+                              color: Theme.of(context).textTheme.bodyMedium?.color,
                             ),
                           ),
                         ],
@@ -233,6 +216,7 @@ class DayReserveDesktopViewState extends State<DayReserveDesktopView> {
 
                       final reserves = value;
                       final formatter = DateFormat('yyyy-MM-ddTHH:mm:ss.SSSZ' , 'es_ES');
+                      final formatterView = DateFormat('MMM d, yyyy h:mm a', 'es_Es');
                       final selectedDate = DateTime(widget.selectedDay.year, widget.selectedDay.month, widget.selectedDay.day);
 
                       final citasDelDiaSeleccionado = reserves.where((reserve) {
@@ -271,24 +255,25 @@ class DayReserveDesktopViewState extends State<DayReserveDesktopView> {
                           children: [
                             ...filteredAppointments.map((reserve) {
                               return Builder(builder: (context) {
-                                Color containerColor;
                                 String state = reserve['state'].toString();
+                                Gradient containerColor;
 
                                 switch (state) {
                                   case 'Expiró':
-                                    containerColor = Colors.orange;
+                                    containerColor =
+                                    statesMenu[1]['gradient'];
                                     break;
                                   case 'Atendido':
-                                    containerColor = Colors.blue;
+                                    containerColor =
+                                    statesMenu[2]['gradient'];
                                     break;
                                   case 'Cancelado':
-                                    containerColor = Colors.red;
-                                    break;
-                                  case 'Reserva agendada':
-                                    containerColor = Colors.green[300]!;
+                                    containerColor =
+                                    statesMenu[3]['gradient'];
                                     break;
                                   default:
-                                    containerColor = Colors.green[300]!;
+                                    containerColor =
+                                    statesMenu[0]['gradient'];
                                 }
 
                                 return Padding(
@@ -297,11 +282,11 @@ class DayReserveDesktopViewState extends State<DayReserveDesktopView> {
                                   child: Container(
                                     height: 90,
                                     decoration: BoxDecoration(
-                                      color: Theme.of(context).primaryColor,
+                                      color: Theme.of(context).colorScheme.onPrimary,
                                       borderRadius: BorderRadius.circular(15),
                                       boxShadow: <BoxShadow>[
                                         BoxShadow(
-                                          color: Colors.black.withOpacity(0.2),
+                                          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
                                           spreadRadius: 0.2,
                                           blurRadius: 20,
                                           offset: const Offset(10, 8),
@@ -315,93 +300,78 @@ class DayReserveDesktopViewState extends State<DayReserveDesktopView> {
                                         ),
                                         );
                                       },
-                                      child: Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                      child: Column(
                                         children: [
-                                          Column(
+                                          Row(
                                             mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                            MainAxisAlignment.spaceBetween,
                                             children: [
                                               Padding(
                                                 padding: const EdgeInsets.only(
-                                                    left: 15, top: 5, bottom: 5),
-                                                child: Text(
-                                                  '${reserve['name']} '
-                                                      '${reserve['last_name']}',
-                                                  style: TextStyle(
-                                                      fontWeight: FontWeight.bold,
-                                                      fontSize: 17,
-                                                    color: Theme.of(context)
-                                                        .textTheme
-                                                        .bodyLarge
-                                                        ?.color,),
+                                                    left: 15, top: 15, bottom: 5),
+                                                child: SizedBox(
+                                                  width: 200,
+                                                  child: Text(
+                                                      '${reserve['name']} '
+                                                          '${reserve['last_name']}',
+                                                      style: const TextStyle(
+                                                          fontWeight:
+                                                          FontWeight.bold),
+                                                      maxLines: 1,
+                                                      overflow: TextOverflow.ellipsis
+                                                  ),
                                                 ),
                                               ),
                                               Padding(
-                                                padding:
-                                                const EdgeInsets.only(left: 15),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      '${reserve['equipment_type']}',
-                                                      style: TextStyle(
-                                                        color: Theme.of(context)
-                                                            .textTheme
-                                                            .bodyLarge
-                                                            ?.color,
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding: const EdgeInsets.only(
-                                                          top: 3, bottom: 5),
-                                                      child: Text(
-                                                        '${reserve['falla_type']}',
-                                                        style: TextStyle(
-                                                          color: Theme.of(context)
-                                                              .textTheme
-                                                              .bodyLarge
-                                                              ?.color,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.end,
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                const EdgeInsets.only(right: 15),
+                                                padding: const EdgeInsets.only(
+                                                    right: 15),
                                                 child: Container(
                                                   height: 10,
                                                   width: 10,
                                                   decoration: BoxDecoration(
-                                                      color: containerColor,
-                                                      borderRadius:
-                                                      BorderRadius.circular(50)),
+                                                      gradient: containerColor,
+                                                      shape: BoxShape.circle),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Row(
+                                            crossAxisAlignment: CrossAxisAlignment.end,
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 15),
+                                                child: SizedBox(
+                                                  width: 150,
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                          '${reserve['equipment_type']}',
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow.ellipsis
+                                                      ),
+                                                      Text(
+                                                          '${reserve['falla_type']}',
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow.ellipsis
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                               Padding(
                                                 padding:
-                                                const EdgeInsets.only(right: 10),
+                                                const EdgeInsets.only(
+                                                    right: 10),
                                                 child: Text(
-                                                  formatter.format(DateTime.parse(reserve['created_at']),),
-                                                  style: TextStyle(
-                                                    color: Theme.of(context)
-                                                        .textTheme
-                                                        .bodyLarge
-                                                        ?.color,
-                                                  ),
+                                                  formatterView.format(DateTime
+                                                      .parse(reserve[
+                                                  'created_at'])),
                                                 ),
                                               ),
                                             ],
@@ -434,7 +404,7 @@ class DayReserveDesktopViewState extends State<DayReserveDesktopView> {
                   borderRadius: BorderRadius.circular(5),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
+                      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
                       spreadRadius: 0.2,
                       blurRadius:20,
                       offset: const Offset(0, 8),

@@ -82,12 +82,12 @@ class MyAppState extends State<MyApp> {
         return MaterialApp(
         debugShowCheckedModeBanner: false,
           theme: darkModeTheme == false ? ThemeData(
-            primaryColor:  const Color(0xFF463d90),
-            hintColor:  Colors.white,
-            secondaryHeaderColor: const Color(0xFF031542),
-            textTheme: const TextTheme(
-              bodyLarge: TextStyle(color: Color(0xFF031542)),
-              bodyMedium: TextStyle(color: Color(0xFF8e5cff),
+            primaryColor:  const Color(0xFF8e5cff),
+            hintColor:  Color(0xFFea80fc),
+            secondaryHeaderColor: Colors.purple,
+            textTheme: TextTheme(
+              bodyMedium: TextStyle(color: Colors.purple.shade800),
+              bodyLarge: TextStyle(color: Color(0xFF8e5cff),
               ),
             ),
             elevatedButtonTheme: ElevatedButtonThemeData(
@@ -107,17 +107,20 @@ class MyAppState extends State<MyApp> {
                 color: Colors.white,
               ),
             ),
-            colorScheme: const ColorScheme(
-              background: Colors.white,
-              brightness: Brightness.dark,
-              primary: Colors.blue,
-              onPrimary: Color(0xFF463d90),
+            textSelectionTheme: TextSelectionThemeData(
+              cursorColor: Colors.purpleAccent.shade100, // Cambia a tu color preferido
+            ),
+            colorScheme: ColorScheme(
+              background: Colors.deepPurpleAccent.shade100.withOpacity(0.15),
+              brightness: Brightness.light,
+              primary: Colors.white,
+              onPrimary: Color(0xFFe3d0ff),
               secondary: Color(0xFFca4cfd),
-              onSecondary: Colors.purple,
+              onSecondary: const Color(0xFFffcffa).withOpacity(0.8),
               onError: Colors.blue,
               onBackground: Color(0xFF8e5cff),
               onSurface: Colors.black,
-              surface: Color(0xFF031542),
+              surface: Colors.white,
               error: Colors.red,
             ),
             iconTheme: const IconThemeData(
@@ -151,10 +154,10 @@ class MyAppState extends State<MyApp> {
               ),
             ),
             colorScheme: const ColorScheme(
-              background: Color(0xFF031542),
+              background: Color(0xFF555555),
               brightness: Brightness.dark,
-              primary: Colors.blue,
-              onPrimary: Color(0xFF463d90),
+              primary: Color(0xFF3b3b3b),
+              onPrimary: Color(0xFF656565),
               secondary: Color(0xFFca4cfd),
               onSecondary: Colors.purple,
               onError: Colors.blue,

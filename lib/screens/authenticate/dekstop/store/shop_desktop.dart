@@ -295,6 +295,8 @@ class _ShopDesktopViewState extends State<ShopDesktopView> {
                                                               ?.color,
                                                           fontWeight:
                                                           FontWeight.bold),
+                                                      maxLines: 1,
+                                                      overflow: TextOverflow.ellipsis,
                                                     ),
                                                   ),
                                                   SizedBox(

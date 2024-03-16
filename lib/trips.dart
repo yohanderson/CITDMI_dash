@@ -27,7 +27,6 @@ class Trips extends StatefulWidget {
 }
 
 class _TripsState extends State<Trips> {
-  bool navigatorBar = false;
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -132,365 +131,18 @@ class _TripsState extends State<Trips> {
   ];
 
   Widget buildNavigationBar600() {
-    return Container(
-      width: navigatorBar == false ? 80 : 200,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        color: Theme.of(context).colorScheme.primary,
-          boxShadow: [
-      BoxShadow(
-      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
-      spreadRadius: 0.2,
-      blurRadius:20,
-      offset: const Offset(10, 8),
-    ),
-    ],
-      ),
-      child: Expanded(
-        child: Column(
-          children: [
-            if (navigatorBar == false) ...[
-              const SizedBox(
-                height: 20,
-              ),
-              const Spacer(),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: InkWell(
-                  child: _selectedIndex == 0
-                      ? Container(
-                      height: 35,
-                      width: 35,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          gradient: const LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: <Color>[
-                              Color(0xFF8e5cff),
-                              Color(0xFFca4cfd),
-                            ],
-                          ),
-                      ),
-                      child: const Icon(Icons.villa, color: Color(0xFF031542)))
-                      : const SizedBox(
-                    height: 35,
-                    child: Icon(
-                      Icons.villa,
-                      color: Colors.white,
-                    ),
-                  ),
-                  onTap: () {
-                    setState(() {
-                      _selectedIndex = 0;
-                    });
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: InkWell(
-                  child: _selectedIndex == 1
-                      ? Container(
-                      height: 35,
-                      width: 35,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          gradient: const LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: <Color>[
-                              Color(0xFF8e5cff),
-                              Color(0xFFca4cfd),
-                            ],
-                          )
-                      ),
-                      child: const Icon(Icons.shopify_outlined, color: Color(0xFF031542)))
-                      : const SizedBox(
-                    height: 35,
-                    child: Icon(
-                      Icons.shopify_outlined,
-                      color: Colors.white,
-                    ),
-                  ),
-                  onTap: () {
-                    setState(() {
-                      _selectedIndex = 1;
-                    });
-                  },
-                ),
-              ),
-              InkWell(
-                child: _selectedIndex == 2
-                    ? Container(
-                    height: 35,
-                    width: 35,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        gradient: const LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: <Color>[
-                            Color(0xFF8e5cff),
-                            Color(0xFFca4cfd),
-                          ],
-                        )
-                    ),child: const Icon(Icons.local_taxi, color: Color(0xFF031542)))
-                    : const SizedBox(
-                  height: 35,
-                  child: Icon(
-                    Icons.local_taxi,
-                    color: Colors.white,
-                  ),
-                ),
-                onTap: () {
-                  setState(() {
-                    _selectedIndex = 2;
-                  });
-                },
-              ),
-              const Spacer(),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: IconButton(
-                  icon: const Icon(
-                    Icons.arrow_forward_ios,
-                    color: Colors.white,
-                    size: 15,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      navigatorBar = true;
-                    });
-                  },
-                ),
-              ),
-            ] else ...[
-              const SizedBox(
-                height: 20,
-              ),
-              const Spacer(),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      _selectedIndex = 0;
-                    });
-                  },
-                  child: _selectedIndex == 0
-                      ? Container(
-                    height: 35,
-                    width: 150,
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: <Color>[
-                          Color(0xFF8e5cff),
-                          Color(0xFFca4cfd),
-                        ],
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Row(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(left: 10, right: 5),
-                          child: Icon(Icons
-                              .villa, color: Color(0xFF031542),),
-                        ),
-                        Text(
-                          'Alojamientos',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF031542),),
-                        ),
-                      ],
-                    ),
-                  )
-                      : const SizedBox(
-                    height: 35,
-                    width: 150,
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(left: 10, right: 5),
-                          child: Icon(Icons.villa,
-                              color: Colors.white),
-                        ),
-                        Text(
-                          'Alojamientos',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      _selectedIndex = 1;
-                    });
-                  },
-                  child: _selectedIndex == 1
-                      ? Container(
-                    height: 35,
-                    width: 150,
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: <Color>[
-                          Color(0xFF8e5cff),
-                          Color(0xFFca4cfd),
-                        ],
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Row(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(left: 10, right: 5),
-                          child: Icon(Icons
-                              .shopify_outlined, color: Color(0xFF031542),),
-                        ),
-                        Text(
-                          'Tienda',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF031542),),
-                        ),
-                      ],
-                    ),
-                  )
-                      : const SizedBox(
-                    height: 35,
-                    width: 150,
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(left: 10, right: 5),
-                          child: Icon(Icons.shopify_outlined,
-                              color: Colors.white),
-                        ),
-                        Text(
-                          'Tienda',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  setState(() {
-                    _selectedIndex = 2;
-                  });
-                },
-                child: _selectedIndex == 2
-                    ? Container(
-                  height: 35,
-                  width: 150,
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: <Color>[
-                        Color(0xFF8e5cff),
-                        Color(0xFFca4cfd),
-                      ],
-                    ),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: 10, right: 5),
-                        child: Icon(Icons
-                            .local_taxi, color: Color(0xFF031542),),
-                      ),
-                      Text(
-                        'MotoCab',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF031542),),
-                      ),
-                    ],
-                  ),
-                )
-                    : const SizedBox(
-                  height: 35,
-                  width: 150,
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: 10, right: 5),
-                        child: Icon(Icons.local_taxi,
-                            color: Colors.white),
-                      ),
-                      Text(
-                        'MotoCab',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const Spacer(),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.white,
-                    size: 15,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      navigatorBar = false;
-                    });
-                  },
-                ),
-              ),
-            ],
-          ],
-        ),
-      ),
-    );
-  }
-
-  //desktop
-  final List<Widget> pagesIndex900 = [
-    const ShopDekstopPanel(),
-    const ReservesDesktop(),
-    const PanelDesktop(),
-  ];
-
-  Widget buildNavigationBar900() {
     return Padding(
       padding: const EdgeInsets.only(top: 20, bottom: 20, left: 20, right: 15),
       child: Container(
-        width: navigatorBar == false ? 80 : 150,
+        width:  80,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-            color: Theme.of(context).colorScheme.primary,
+          color: Theme.of(context).colorScheme.primary,
           boxShadow: [
             BoxShadow(
               color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
-              spreadRadius: 0.2,
-              blurRadius:20,
-              offset: const Offset(5, 5),
+              blurRadius: 10,
+              offset: const Offset(3, 3),
             ),
           ],
         ),
@@ -542,195 +194,11 @@ class _TripsState extends State<Trips> {
                 ),
               ),
             ),
-            ValueListenableBuilder<bool>(
-                valueListenable: widget.darkMode,
-                builder: (context, value, child) {
-                  var darkMode = value;
-                return darkMode == false ?
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      widget.darkMode.value = true;
-                    });
-                  },
-                  child: SizedBox(
-                    width: 60,
-                    height: 25,
-                    child: Stack(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                  offset: const Offset(2,2),
-                                  color: Colors.black.withOpacity(0.2),
-                                  blurRadius: 5,
-                                ),
-                                BoxShadow(
-                                    offset: Offset(-2,-2),
-                                    color: Color(0xFF031542).withOpacity(0.7),
-                                    blurRadius: 4,
-                                    inset: true
-                                ),
-                              ]
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 6),
-                            child: Container(
-                              height: 17,
-                              width: 17,
-                              decoration: BoxDecoration(
-                                color: Color(0xFF031542),
-                                shape: BoxShape.circle,
-                                boxShadow: [
-                                  BoxShadow(
-                                      offset: const Offset(2,2),
-                                      color: Colors.white.withOpacity(0.7),
-                                      blurRadius: 3,
-                                      inset: true
-                                  ),
-                                ]
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ) : InkWell(
-                  onTap: () {
-                    setState(() {
-                      widget.darkMode.value = false;
-                    });
-                  },
-                  child: SizedBox(
-                    width: 60,
-                    height: 25,
-                    child: Stack(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                              color: const Color(0xFF031542),
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                  offset: const Offset(2,2),
-                                  color: Colors.black.withOpacity(0.2),
-                                  blurRadius: 5,
-                                ),
-                                BoxShadow(
-                                    offset: const Offset(1,1),
-                                    color: Colors.white.withOpacity(0.7),
-                                    blurRadius: 5,
-                                    inset: true
-                                ),
-
-                              ]
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 6),
-                            child: Container(
-                              height: 17,
-                              width: 17,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle,
-                                  boxShadow: [
-                                    BoxShadow(
-                                        offset: const Offset(-2,-2),
-                                        color: Color(0xFF031542).withOpacity(0.7),
-                                        blurRadius: 5,
-                                        inset: true
-                                    ),
-                                  ]
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              }
-            ),
-            if (navigatorBar == false) ...[
-              const Spacer(),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: InkWell(
-                  child: _selectedIndex == 0
-                      ? Container(
-                      height: 35,
-                      width: 35,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                         gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: <Color>[
-                              Theme.of(context).primaryColor,
-                              Theme.of(context).hintColor,
-                            ],
-                          )
-                      ),
-                      child: Icon(Icons.stacked_bar_chart, color: Theme.of(context).textTheme.bodyLarge?.color,))
-                  : SizedBox(
-                    height: 35,
-                    child: Icon(
-                      Icons.stacked_bar_chart,
-                      color: Theme.of(context).textTheme.bodyLarge?.color,
-                    ),
-                  ),
-                  onTap: () {
-                    setState(() {
-                      _selectedIndex = 0;
-                    });
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: InkWell(
-                  child: _selectedIndex == 1
-                      ? Container(
-                      height: 35,
-                      width: 35,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: <Color>[
-                              Theme.of(context).primaryColor,
-                              Theme.of(context).hintColor,
-                            ],
-                          )
-                      ),
-                      child: Icon(Icons.villa, color: Theme.of(context).textTheme.bodyLarge?.color,))
-                      : SizedBox(
-                    height: 35,
-                        child: Icon(
-                                            Icons.villa,
-                                            color: Theme.of(context).textTheme.bodyLarge?.color,
-                                          ),
-                      ),
-                  onTap: () {
-                    setState(() {
-                      _selectedIndex = 1;
-                    });
-                  },
-                ),
-              ),
-              InkWell(
-                child: _selectedIndex == 2
+            const Spacer(),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: InkWell(
+                child: _selectedIndex == 0
                     ? Container(
                     height: 35,
                     width: 35,
@@ -740,237 +208,509 @@ class _TripsState extends State<Trips> {
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                           colors: <Color>[
-                            Theme.of(context).primaryColor,
                             Theme.of(context).hintColor,
+                            Theme.of(context).colorScheme.onPrimary
                           ],
                         )
-                    ),child: Icon(Icons.local_taxi, color: Theme.of(context).textTheme.bodyLarge?.color,))
+                    ),
+                    child: Icon(Icons.stacked_bar_chart, color: Theme.of(context).textTheme.bodyMedium?.color,))
                     : SizedBox(
                   height: 35,
-                      child: Icon(
-                                        Icons.local_taxi,
-                                        color: Theme.of(context).textTheme.bodyLarge?.color,
-                                      ),
-                    ),
+                  child: Icon(
+                    Icons.stacked_bar_chart,
+                    color: Theme.of(context).textTheme.bodyMedium?.color,
+                  ),
+                ),
                 onTap: () {
                   setState(() {
-                    _selectedIndex = 2;
+                    _selectedIndex = 0;
                   });
                 },
               ),
-              const Spacer(),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: IconButton(
-                  icon: Icon(
-                    Icons.arrow_forward_ios,
-                    color: Theme.of(context).textTheme.bodyLarge?.color,
-                    size: 15,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      navigatorBar = true;
-                    });
-                  },
-                ),
-              ),
-            ]
-            else ...[
-              const Spacer(),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      _selectedIndex = 0;
-                    });
-                  },
-                  child: _selectedIndex == 0
-                      ? Container(
-                    height: 35,
-                    width: 130,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: <Color>[
-                          Theme.of(context).primaryColor,
-                          Theme.of(context).hintColor,
-                        ],
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10, right: 5),
-                          child: Icon(Icons
-                              .stacked_bar_chart, color: Theme.of(context).textTheme.bodyLarge?.color,),
-                        ),
-                        Text(
-                          'Estadisticas',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).textTheme.bodyLarge?.color,),
-                        ),
-                      ],
-                    ),
-                  )
-                      : SizedBox(
-                    height: 35,
-                    width: 130,
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10, right: 5),
-                          child: Icon(Icons.send_time_extension,
-                              color: Theme.of(context).textTheme.bodyLarge?.color,),
-                        ),
-                        Text(
-                          'Estadisticas',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).textTheme.bodyLarge?.color,),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      _selectedIndex = 1;
-                    });
-                  },
-                  child: _selectedIndex == 1
-                      ? Container(
-                    height: 35,
-                    width: 130,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: <Color>[
-                          Theme.of(context).primaryColor,
-                          Theme.of(context).hintColor,
-                        ],
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10, right: 5),
-                          child: Icon(Icons
-                              .shopify_outlined, color: Theme.of(context).textTheme.bodyLarge?.color,),
-                        ),
-                        Text(
-                          'Tienda',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).textTheme.bodyLarge?.color,),
-                        ),
-                      ],
-                    ),
-                  )
-                      : SizedBox(
-                    height: 35,
-                    width: 130,
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10, right: 5),
-                          child: Icon(Icons.shopify_outlined,
-                              color: Theme.of(context).textTheme.bodyLarge?.color,),
-                        ),
-                        Text(
-                          'Tienda',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).textTheme.bodyLarge?.color,),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  setState(() {
-                    _selectedIndex = 2;
-                  });
-                },
-                child: _selectedIndex == 2
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: InkWell(
+                child: _selectedIndex == 1
                     ? Container(
-                  height: 35,
-                  width: 130,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: <Color>[
-                        Theme.of(context).primaryColor,
-                        Theme.of(context).hintColor,
-                      ],
+                    height: 35,
+                    width: 35,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: <Color>[
+                            Theme.of(context).hintColor,
+                            Theme.of(context).colorScheme.onPrimary
+                          ],
+                        )
                     ),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10, right: 5),
-                        child: Icon(Icons
-                            .local_taxi, color: Theme.of(context).textTheme.bodyLarge?.color,),
-                      ),
-                      Text(
-                        'MotoCab',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).textTheme.bodyLarge?.color,),
-                      ),
-                    ],
-                  ),
-                )
+                    child: Icon(Icons.villa, color: Theme.of(context).textTheme.bodyMedium?.color,))
                     : SizedBox(
                   height: 35,
-                  width: 130,
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10, right: 5),
-                        child: Icon(Icons.local_taxi,
-                            color: Theme.of(context).textTheme.bodyLarge?.color,),
+                  child: Icon(
+                    Icons.villa,
+                    color: Theme.of(context).textTheme.bodyMedium?.color,
+                  ),
+                ),
+                onTap: () {
+                  setState(() {
+                    _selectedIndex = 1;
+                  });
+                },
+              ),
+            ),
+            InkWell(
+              child: _selectedIndex == 2
+                  ? Container(
+                  height: 35,
+                  width: 35,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: <Color>[
+                          Theme.of(context).hintColor,
+                          Theme.of(context).colorScheme.onPrimary
+                        ],
+                      )
+                  ),child: Icon(Icons.local_taxi, color: Theme.of(context).textTheme.bodyMedium?.color,))
+                  : SizedBox(
+                height: 35,
+                child: Icon(
+                  Icons.local_taxi,
+                  color: Theme.of(context).textTheme.bodyMedium?.color,
+                ),
+              ),
+              onTap: () {
+                setState(() {
+                  _selectedIndex = 2;
+                });
+              },
+            ),
+            const Spacer(),
+            ValueListenableBuilder<bool>(
+                valueListenable: widget.darkMode,
+                builder: (context, value, child) {
+                  var darkMode = value;
+                  return darkMode == false ?
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        widget.darkMode.value = true;
+                      });
+                    },
+                    child: SizedBox(
+                      width: 60,
+                      height: 25,
+                      child: Stack(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20),
+                                boxShadow: [
+                                  BoxShadow(
+                                    offset: const Offset(2,2),
+                                    color: Colors.black.withOpacity(0.2),
+                                    blurRadius: 5,
+                                  ),
+                                  BoxShadow(
+                                      offset: Offset(-2,-2),
+                                      color: Color(0xFF031542).withOpacity(0.7),
+                                      blurRadius: 4,
+                                      inset: true
+                                  ),
+                                ]
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 6),
+                              child: Container(
+                                height: 17,
+                                width: 17,
+                                decoration: BoxDecoration(
+                                    color: Color(0xFF031542),
+                                    shape: BoxShape.circle,
+                                    boxShadow: [
+                                      BoxShadow(
+                                          offset: const Offset(2,2),
+                                          color: Colors.white.withOpacity(0.7),
+                                          blurRadius: 3,
+                                          inset: true
+                                      ),
+                                    ]
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      Text(
-                        'MotoCab',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).textTheme.bodyLarge?.color,),
+                    ),
+                  ) : InkWell(
+                    onTap: () {
+                      setState(() {
+                        widget.darkMode.value = false;
+                      });
+                    },
+                    child: SizedBox(
+                      width: 60,
+                      height: 25,
+                      child: Stack(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                                color: const Color(0xFF031542),
+                                borderRadius: BorderRadius.circular(20),
+                                boxShadow: [
+                                  BoxShadow(
+                                    offset: const Offset(2,2),
+                                    color: Colors.black.withOpacity(0.2),
+                                    blurRadius: 5,
+                                  ),
+                                  BoxShadow(
+                                      offset: const Offset(1,1),
+                                      color: Colors.white.withOpacity(0.7),
+                                      blurRadius: 5,
+                                      inset: true
+                                  ),
+
+                                ]
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 6),
+                              child: Container(
+                                height: 17,
+                                width: 17,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle,
+                                    boxShadow: [
+                                      BoxShadow(
+                                          offset: const Offset(-2,-2),
+                                          color: Color(0xFF031542).withOpacity(0.7),
+                                          blurRadius: 5,
+                                          inset: true
+                                      ),
+                                    ]
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  //desktop
+  final List<Widget> pagesIndex900 = [
+    const ReservesDesktop(),
+    const ShopDekstopPanel(),
+    const PanelDesktop(),
+  ];
+
+  Widget buildNavigationBar900() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20, bottom: 20, left: 20, right: 15),
+      child: Container(
+        width:  80,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+            color: Theme.of(context).colorScheme.primary,
+          boxShadow: [
+            BoxShadow(
+              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
+              blurRadius: 10,
+              offset: const Offset(3, 3),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const AccountDash()));
+                },
+                child: SizedBox(
+                  height: 55,
+                  width: 55,
+                  child: Stack(
+                    children: [
+                      Positioned.fill(
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Container(
+                            height: 55,
+                            width: 55,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient:  LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  Theme.of(context).hintColor,
+                                  Theme.of(context).colorScheme.onPrimary
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned.fill(
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Container(
+                            height: 50,
+                            width: 50,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
+                              child:  Image.network('assets/img/creax.jpg'),),
+                          ),
+                        ),
                       ),
                     ],
                   ),
                 ),
               ),
-              const Spacer(),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: IconButton(
-                  icon: Icon(
-                    Icons.arrow_back_ios,
-                    color: Theme.of(context).textTheme.bodyLarge?.color,
-                    size: 15,
+            ),
+            const Spacer(),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: InkWell(
+                child: _selectedIndex == 0
+                    ? Container(
+                    height: 35,
+                    width: 35,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: <Color>[
+                            Theme.of(context).hintColor,
+                            Theme.of(context).colorScheme.onPrimary
+                          ],
+                        )
+                    ),
+                    child: Icon(Icons.stacked_bar_chart, color: Theme.of(context).textTheme.bodyMedium?.color,))
+                    : SizedBox(
+                  height: 35,
+                  child: Icon(
+                    Icons.stacked_bar_chart,
+                    color: Theme.of(context).textTheme.bodyMedium?.color,
                   ),
-                  onPressed: () {
-                    setState(() {
-                      navigatorBar = false;
-                    });
-                  },
+                ),
+                onTap: () {
+                  setState(() {
+                    _selectedIndex = 0;
+                  });
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: InkWell(
+                child: _selectedIndex == 1
+                    ? Container(
+                    height: 35,
+                    width: 35,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: <Color>[
+                            Theme.of(context).hintColor,
+                            Theme.of(context).colorScheme.onPrimary
+                          ],
+                        )
+                    ),
+                    child: Icon(Icons.villa, color: Theme.of(context).textTheme.bodyMedium?.color,))
+                    : SizedBox(
+                  height: 35,
+                  child: Icon(
+                    Icons.villa,
+                    color: Theme.of(context).textTheme.bodyMedium?.color,
+                  ),
+                ),
+                onTap: () {
+                  setState(() {
+                    _selectedIndex = 1;
+                  });
+                },
+              ),
+            ),
+            InkWell(
+              child: _selectedIndex == 2
+                  ? Container(
+                  height: 35,
+                  width: 35,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: <Color>[
+                          Theme.of(context).hintColor,
+                          Theme.of(context).colorScheme.onPrimary
+                        ],
+                      )
+                  ),child: Icon(Icons.local_taxi, color: Theme.of(context).textTheme.bodyMedium?.color,))
+                  : SizedBox(
+                height: 35,
+                child: Icon(
+                  Icons.local_taxi,
+                  color: Theme.of(context).textTheme.bodyMedium?.color,
                 ),
               ),
-            ],
+              onTap: () {
+                setState(() {
+                  _selectedIndex = 2;
+                });
+              },
+            ),
+            const Spacer(),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: ValueListenableBuilder<bool>(
+                  valueListenable: widget.darkMode,
+                  builder: (context, value, child) {
+                    var darkMode = value;
+                    return darkMode == false ?
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          widget.darkMode.value = true;
+                        });
+                      },
+                      child: SizedBox(
+                        width: 50,
+                        height: 22,
+                        child: Stack(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: Theme.of(context).colorScheme.onPrimary,
+                                  borderRadius: BorderRadius.circular(20),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      offset: const Offset(2,2),
+                                      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.3),
+                                      blurRadius: 3,
+                                    ),
+                                    BoxShadow(
+                                        offset: const Offset(1,1),
+                                        color: Colors.white.withOpacity(0.5),
+                                        blurRadius: 3,
+                                        inset: true
+                                    ),
+
+                                  ]
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 6),
+                                child: Container(
+                                  height: 14,
+                                  width: 14,
+                                  decoration: BoxDecoration(
+                                      color: Theme.of(context).colorScheme.secondary,
+                                      shape: BoxShape.circle,
+                                      boxShadow: [
+                                        BoxShadow(
+                                            offset: const Offset(-2,-2),
+                                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                                            blurRadius: 5,
+                                            inset: true
+                                        ),
+                                      ]
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ) : InkWell(
+                      onTap: () {
+                        setState(() {
+                          widget.darkMode.value = false;
+                        });
+                      },
+                      child: SizedBox(
+                        width: 50,
+                        height: 22,
+                        child: Stack(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: Theme.of(context).colorScheme.background,
+                                  borderRadius: BorderRadius.circular(20),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      offset: const Offset(2,2),
+                                      color: Colors.black.withOpacity(0.2),
+                                      blurRadius: 5,
+                                    ),
+                                    BoxShadow(
+                                        offset: const Offset(-2,-2),
+                                        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                                        blurRadius: 4,
+                                        inset: true
+                                    ),
+                                  ]
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 6),
+                                child: Container(
+                                  height: 14,
+                                  width: 14,
+                                  decoration: BoxDecoration(
+                                      color: Theme.of(context).colorScheme.secondary,
+                                      shape: BoxShape.circle,
+                                      boxShadow: [
+                                        BoxShadow(
+                                            offset: const Offset(2,2),
+                                            color: Colors.white.withOpacity(0.7),
+                                            blurRadius: 3,
+                                            inset: true
+                                        ),
+                                      ]
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }
+              ),
+            ),
           ],
         ),
       ),
@@ -1005,11 +745,6 @@ class _TripsState extends State<Trips> {
           return Scaffold(
             body: Stack(
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.background,
-                  ),
-                ),
                 Row(
                   children: [
                     buildNavigationBar900(),

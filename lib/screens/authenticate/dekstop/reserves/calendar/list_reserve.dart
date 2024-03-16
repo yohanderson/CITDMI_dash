@@ -62,7 +62,7 @@ class _ListReservesDesktopState extends State<ListReservesDesktop> {
                               ?.color, shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
+                              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
                               spreadRadius: 0.2,
                               blurRadius:20,
                               offset: const Offset(10, 8),
@@ -80,7 +80,7 @@ class _ListReservesDesktopState extends State<ListReservesDesktop> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: statesMenu.map((state) {
                 String stateText = state['state'];
-                Color stateColor = state['color'];
+                Gradient stateColor = state['gradient'];
                 return InkWell(
                   onTap: () {
                     setState(() {
@@ -113,7 +113,7 @@ class _ListReservesDesktopState extends State<ListReservesDesktop> {
                               width: 10,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: stateColor,
+                                gradient: stateColor,
                               ),
                             ),
                           )
@@ -140,14 +140,14 @@ class _ListReservesDesktopState extends State<ListReservesDesktop> {
           final reserves = value;
 
           return Container(
-            height: 620,
+            height: 610,
             width: 550,
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.primary,
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
+                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
                   spreadRadius: 0.2,
                   blurRadius:20,
                   offset: const Offset(10, 8),
@@ -224,20 +224,24 @@ class _ListReservesDesktopState extends State<ListReservesDesktop> {
                                 itemBuilder: (context, index) {
                                   final reserve = filteredReserves[index];
                                   final state = reserve['state'].toString();
-                                  Color containerColor;
+                                  Gradient containerColor;
 
                                   switch (state) {
                                     case 'Expiró':
-                                      containerColor = Colors.orange;
+                                      containerColor =
+                                      statesMenu[1]['gradient'];
                                       break;
                                     case 'Atendido':
-                                      containerColor = Colors.blue;
+                                      containerColor =
+                                      statesMenu[2]['gradient'];
                                       break;
                                     case 'Cancelado':
-                                      containerColor = Colors.red;
+                                      containerColor =
+                                      statesMenu[3]['gradient'];
                                       break;
                                     default:
-                                      containerColor = Colors.green[300]!;
+                                      containerColor =
+                                      statesMenu[0]['gradient'];
                                   }
 
                                   return Padding(
@@ -246,14 +250,13 @@ class _ListReservesDesktopState extends State<ListReservesDesktop> {
                                     child: Container(
                                       height: 90,
                                       decoration: BoxDecoration(
-                                        color: Theme.of(context).primaryColor,
-                                        borderRadius: BorderRadius.circular(15),
+                                        color: Theme.of(context).colorScheme.onPrimary,
+                                        borderRadius: BorderRadius.circular(8),
                                         boxShadow: <BoxShadow>[
                                           BoxShadow(
-                                            color: Colors.black.withOpacity(0.2),
-                                            spreadRadius: 0.2,
-                                            blurRadius: 20,
-                                            offset: const Offset(10, 8),
+                                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.25),
+                                            blurRadius: 3,
+                                            offset: const Offset(2, 2),
                                           ),
                                         ],
                                       ),
@@ -275,16 +278,17 @@ class _ListReservesDesktopState extends State<ListReservesDesktop> {
                                                 Padding(
                                                   padding: const EdgeInsets.only(
                                                       left: 15, top: 15, bottom: 5),
-                                                  child: Text(
-                                                    '${reserve['name']} '
-                                                    '${reserve['last_name']}',
-                                                    style: TextStyle(
-                                                        color: Theme.of(context)
-                                                            .textTheme
-                                                            .bodyLarge
-                                                            ?.color,
-                                                        fontWeight:
-                                                            FontWeight.bold),
+                                                  child: SizedBox(
+                                                    width: 200,
+                                                    child: Text(
+                                                      '${reserve['name']} '
+                                                      '${reserve['last_name']}',
+                                                      style: const TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow.ellipsis
+                                                    ),
                                                   ),
                                                 ),
                                                 Padding(
@@ -294,70 +298,49 @@ class _ListReservesDesktopState extends State<ListReservesDesktop> {
                                                     height: 10,
                                                     width: 10,
                                                     decoration: BoxDecoration(
-                                                        color: containerColor,
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                50)),
+                                                        gradient: containerColor,
+                                                        shape: BoxShape.circle),
                                                   ),
                                                 ),
                                               ],
                                             ),
                                             Row(
+                                              crossAxisAlignment: CrossAxisAlignment.end,
                                               mainAxisAlignment:
                                                   MainAxisAlignment.spaceBetween,
                                               children: [
                                                 Padding(
                                                   padding: const EdgeInsets.only(
                                                       left: 15),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment.start,
-                                                    children: [
-                                                      Text(
-                                                        '${reserve['equipment_type']}',
-                                                        style: TextStyle(
-                                                          color: Theme.of(context)
-                                                              .textTheme
-                                                              .bodyLarge
-                                                              ?.color,
+                                                  child: SizedBox(
+                                                    width: 150,
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment.start,
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: [
+                                                        Text(
+                                                          '${reserve['equipment_type']}',
+                                                              maxLines: 1,
+                                                          overflow: TextOverflow.ellipsis
                                                         ),
-                                                      ),
-                                                      Text(
-                                                        '${reserve['falla_type']}',
-                                                        style: TextStyle(
-                                                          color: Theme.of(context)
-                                                              .textTheme
-                                                              .bodyLarge
-                                                              ?.color,
+                                                        Text(
+                                                          '${reserve['falla_type']}',
+                                                            maxLines: 1,
+                                                            overflow: TextOverflow.ellipsis
                                                         ),
-                                                      ),
-                                                    ],
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
                                                 Padding(
-                                                  padding: const EdgeInsets.all(10),
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets.only(
-                                                                right: 8.0),
-                                                        child: Text(
-                                                          formatter.format(DateTime
-                                                              .parse(reserve[
-                                                                  'created_at'])),
-                                                          style: TextStyle(
-                                                            color: Theme.of(context)
-                                                                .textTheme
-                                                                .bodyLarge
-                                                                ?.color,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 10),
+                                                  child: Text(
+                                                    formatter.format(DateTime
+                                                        .parse(reserve[
+                                                            'created_at'])),
                                                   ),
                                                 ),
                                               ],
@@ -388,7 +371,7 @@ class _ListReservesDesktopState extends State<ListReservesDesktop> {
                         borderRadius: BorderRadius.circular(5),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
+                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
                             spreadRadius: 0.2,
                             blurRadius:20,
                             offset: const Offset(0, 8),

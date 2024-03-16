@@ -1616,7 +1616,7 @@ class EditProductDesktopState extends State<EditProductDesktop> {
                                               'offer': offer.text.isEmpty ? null : offer.text,
                                               'quantity': quantity.text,
                                               'supplier': supplier.text,
-                                              'id_brand': brandName,
+                                              'brand': brandName,
                                               'iva': iva.text,
                                               'mdcp': mdcp,
                                             });
