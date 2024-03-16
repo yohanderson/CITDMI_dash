@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'package:flutter/cupertino.dart';
 import 'package:web_dash/screens/authenticate/dekstop/reserves/calendar/calendar.dart';
 import 'package:web_dash/screens/authenticate/dekstop/reserves/reserve_desktop_view.dart';
 import 'package:web_dash/screens/authenticate/dekstop/reserves/search_reserves_desktop_view.dart';
@@ -53,18 +52,18 @@ class ReservesDesktopState extends State<ReservesDesktop> {
     },
     {
       'state': 'Expiró',
-      'gradient': LinearGradient(
+      'gradient': const LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
-        colors: [Colors.red.shade200, Colors.red],
+        colors: [Colors.yellow, Colors.orange],
         stops: [0.0, 0.5],
       ),
       'count': 0
     },
     {
       'state': 'Cancelado',
-      'gradient': const LinearGradient(
-        colors: [Colors.yellow, Colors.orange],
+      'gradient': LinearGradient(
+        colors: [Colors.red.shade200, Colors.red],
         stops: [0.1, 0.9],
       ),
       'count': 0
@@ -294,12 +293,12 @@ class ReservesDesktopState extends State<ReservesDesktop> {
                                                                   .circular(10),
                                                               color:
                                                               Theme.of(context)
-                                                                  .primaryColor),
+                                                                  .colorScheme.onPrimary,),
                                                           child: Icon(
                                                             Icons
                                                                 .account_box_rounded,
                                                             color: Theme.of(context)
-                                                                .colorScheme.primary,
+                                                                .primaryColor,
                                                             size: 35,
                                                           )),
                                                       Column(

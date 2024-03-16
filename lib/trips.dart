@@ -418,8 +418,8 @@ class _TripsState extends State<Trips> {
 
   //desktop
   final List<Widget> pagesIndex900 = [
-    const ReservesDesktop(),
     const ShopDekstopPanel(),
+    const ReservesDesktop(),
     const PanelDesktop(),
   ];
 
@@ -640,7 +640,7 @@ class _TripsState extends State<Trips> {
                                       boxShadow: [
                                         BoxShadow(
                                             offset: const Offset(-2,-2),
-                                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                                            color: Theme.of(context).colorScheme.surface.withOpacity(0.7),
                                             blurRadius: 5,
                                             inset: true
                                         ),
@@ -665,17 +665,17 @@ class _TripsState extends State<Trips> {
                           children: [
                             Container(
                               decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.background,
+                                  color: Theme.of(context).colorScheme.onPrimary,
                                   borderRadius: BorderRadius.circular(20),
                                   boxShadow: [
                                     BoxShadow(
                                       offset: const Offset(2,2),
-                                      color: Colors.black.withOpacity(0.2),
+                                      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
                                       blurRadius: 5,
                                     ),
                                     BoxShadow(
                                         offset: const Offset(-2,-2),
-                                        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                                        color: Colors.white.withOpacity(0.7),
                                         blurRadius: 4,
                                         inset: true
                                     ),

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class MenuCategories extends StatefulWidget {
   const MenuCategories(
       {super.key,
-        required this.idPadre,
+        required this.idFather,
         required this.categories,
         required this.categoriesAll,
         required this.onCategorySelectedMenu,
@@ -12,7 +12,7 @@ class MenuCategories extends StatefulWidget {
         required this.offCategorySelectedMenu,
         required this.selectedMenuList, required this.selectedAll});
 
-  final int? idPadre;
+  final int? idFather;
   final List<Map<String, dynamic>> categories;
   final List<Map<String, dynamic>> categoriesAll;
   final Function(int?, int?) onCategorySelectedMenu;
@@ -34,7 +34,7 @@ class _MenuCategoriesState extends State<MenuCategories> {
       width: 150,
       decoration: BoxDecoration(
         border: Border(
-          right: BorderSide(width: 1, color: Colors.black.withOpacity(0.3)),
+          right: BorderSide(width: 1, color: Theme.of(context).primaryColor),
         ),
       ),
       child: Column(
@@ -42,7 +42,7 @@ class _MenuCategoriesState extends State<MenuCategories> {
           const SizedBox(
             height: 10,
           ),
-          widget.idPadre == null
+          widget.idFather == null
               ? SizedBox(
               height: 53,
               child: Center(child: Column(
@@ -56,7 +56,10 @@ class _MenuCategoriesState extends State<MenuCategories> {
                       onPressed: () {
                           widget.selectedAll();
                       },
-                      child: Text('Todo')),
+                      child: Text('Todo',
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyLarge?.color
+                      ),)),
                 ],
               )))
               : SizedBox(
@@ -73,15 +76,16 @@ class _MenuCategoriesState extends State<MenuCategories> {
                       onPressed: () {
                         setState(() {
                           widget
-                              .offCategorySelectedMenu(widget.idPadre);
+                              .offCategorySelectedMenu(widget.idFather);
                         });
                       },
                       icon: const Icon(Icons.chevron_left_outlined),
                     ),
                   ),
-                  Text(widget.categoriesAll.firstWhere((categorie) =>
-                  categorie['id_categorie'] == widget.idPadre)['name'],
-                    style: const TextStyle(
+                  Text(widget.categoriesAll.firstWhere((category) =>
+                  category['id_category'] == widget.idFather)['name'],
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyMedium?.color,
                         fontWeight: FontWeight.w600
                     ),
                   ),
@@ -98,7 +102,7 @@ class _MenuCategoriesState extends State<MenuCategories> {
             child: ListView.builder(
               itemCount: widget.categories.length,
               itemBuilder: (context, index) {
-                final categorie = widget.categories[index];
+                final category = widget.categories[index];
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Row(
@@ -107,13 +111,16 @@ class _MenuCategoriesState extends State<MenuCategories> {
                       TextButton(
                         onPressed: () {
                           setState(() {
-                            widget.onCategorySelected(categorie['id_categorie'], false);
+                            widget.onCategorySelected(category['id_category'], false);
                           });
                         },
-                        child: Text(categorie['name']),
+                        child: Text(category['name'],
+                        style:  TextStyle(
+                            color: Theme.of(context).textTheme.bodyMedium?.color
+                        ),),
                       ),
-                      widget.categoriesAll.any((c) => c['id_padre'] == categorie['id_categorie']) &&
-                          !widget.selectedMenuList.contains(categorie['id'])
+                      widget.categoriesAll.any((c) => c['id_padre'] == category['id_category']) &&
+                          !widget.selectedMenuList.contains(category['id_category'])
                           ? SizedBox(
                         height: 30,
                         width: 30,
@@ -121,8 +128,7 @@ class _MenuCategoriesState extends State<MenuCategories> {
                           padding: EdgeInsets.zero,
                           onPressed: () {
                             setState(() {
-                              widget.onCategorySelectedMenu(
-                                  categorie['id_categorie'], widget.idPadre);
+                              widget.onCategorySelectedMenu(category['id_category'], widget.idFather);
                             });
                           },
                           icon: const Icon(Icons.chevron_right_outlined),

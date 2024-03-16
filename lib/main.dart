@@ -83,11 +83,11 @@ class MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
           theme: darkModeTheme == false ? ThemeData(
             primaryColor:  const Color(0xFF8e5cff),
-            hintColor:  Color(0xFFea80fc),
+            hintColor:  const Color(0xFFea80fc),
             secondaryHeaderColor: Colors.purple,
             textTheme: TextTheme(
               bodyMedium: TextStyle(color: Colors.purple.shade800),
-              bodyLarge: TextStyle(color: Color(0xFF8e5cff),
+              bodyLarge: const TextStyle(color: Color(0xFF8e5cff),
               ),
             ),
             elevatedButtonTheme: ElevatedButtonThemeData(
@@ -107,19 +107,16 @@ class MyAppState extends State<MyApp> {
                 color: Colors.white,
               ),
             ),
-            textSelectionTheme: TextSelectionThemeData(
-              cursorColor: Colors.purpleAccent.shade100, // Cambia a tu color preferido
-            ),
             colorScheme: ColorScheme(
               background: Colors.deepPurpleAccent.shade100.withOpacity(0.15),
               brightness: Brightness.light,
               primary: Colors.white,
-              onPrimary: Color(0xFFe3d0ff),
-              secondary: Color(0xFFca4cfd),
+              onPrimary: const Color(0xFFe3d0ff),
+              secondary: const Color(0xFFca4cfd),
               onSecondary: const Color(0xFFffcffa).withOpacity(0.8),
               onError: Colors.blue,
-              onBackground: Color(0xFF8e5cff),
-              onSurface: Colors.black,
+              onBackground: const Color(0xFF8e5cff),
+              onSurface: Colors.purple.shade800,
               surface: Colors.white,
               error: Colors.red,
             ),
@@ -128,13 +125,12 @@ class MyAppState extends State<MyApp> {
             ),
           ) :
           ThemeData(
-            primaryColor:  const Color(0xFF463d90),
-            hintColor:  Colors.blue,
+            primaryColor:  const Color(0xFF8e5cff),
+            hintColor:  Colors.grey.shade200,
             secondaryHeaderColor: const Color(0xFF031542),
-            textTheme: const TextTheme(
-              bodyLarge: TextStyle(color: Color(0xFF031542)),
-              bodyMedium: TextStyle(color: Color(0xFF8e5cff),
-              ),
+            textTheme: TextTheme(
+              bodyLarge: TextStyle(color: Colors.grey.shade800),
+              bodyMedium: const TextStyle(color: Colors.purple,),
             ),
             elevatedButtonTheme: ElevatedButtonThemeData(
               style: ButtonStyle(
@@ -154,10 +150,10 @@ class MyAppState extends State<MyApp> {
               ),
             ),
             colorScheme: const ColorScheme(
-              background: Color(0xFF555555),
+              background: Color(0xFF232323),
               brightness: Brightness.dark,
-              primary: Color(0xFF3b3b3b),
-              onPrimary: Color(0xFF656565),
+              primary: Color(0xFF989ba8),
+              onPrimary: Color(0xFFe3d0ff),
               secondary: Color(0xFFca4cfd),
               onSecondary: Colors.purple,
               onError: Colors.blue,
@@ -167,7 +163,7 @@ class MyAppState extends State<MyApp> {
               error: Colors.red,
             ),
             iconTheme: const IconThemeData(
-                color: Color(0xFF8e5cff)
+                color: Colors.black
             ),
           ),
           home: authTokenProvider.isAuthenticated ? Trips(darkMode: darkMode,) : Trips(darkMode: darkMode,) ,

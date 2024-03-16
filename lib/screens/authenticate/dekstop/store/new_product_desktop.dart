@@ -19,7 +19,6 @@ class NewProductDesktop extends StatefulWidget {
 }
 
 class NewProductDesktopState extends State<NewProductDesktop> {
-
   SnackBarMessaging snackBarMessaging = SnackBarMessaging();
 
   bool _isLoading = false;
@@ -62,31 +61,44 @@ class NewProductDesktopState extends State<NewProductDesktop> {
     weight = [];
   }
 
-
-
   final List<int?> stack = [null];
   final int _pageIndex = 0;
   late PageController _pageController;
 
-
   @override
   Widget build(BuildContext context) {
-
     void selectPhoto(int colorIndex, int modelIndex) async {
       final List<XFile> pickedFiles = await ImagePicker().pickMultiImage();
       for (final pickedFile in pickedFiles) {
         final Uint8List bytes = await pickedFile.readAsBytes();
 
         // Verificar si los primeros 4 bytes corresponden a la cabecera de un archivo PNG
-        if (bytes.length < 4 || bytes[0] != 0x89 || bytes[1] != 0x50 || bytes[2] != 0x4E || bytes[3] != 0x47) {
+        if (bytes.length < 4 ||
+            bytes[0] != 0x89 ||
+            bytes[1] != 0x50 ||
+            bytes[2] != 0x4E ||
+            bytes[3] != 0x47) {
           showDialog(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                      5), // Aquí puedes cambiar el radio de los bordes
+                ),
                 title: const Text('Formato de archivo no válido'),
-                content: const Text('Por favor, selecciona solo imágenes en formato PNG.'),
+                content: const Text(
+                    'Por favor, selecciona solo imágenes en formato PNG.'),
                 actions: <Widget>[
-                  TextButton(
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:Theme.of(context).primaryColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                        BorderRadius
+                            .circular(5),
+                      ), ),
                     child: const Text('OK'),
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -107,7 +119,6 @@ class NewProductDesktopState extends State<NewProductDesktop> {
       }
     }
 
-
     return SizedBox(
       height: 600,
       width: 600,
@@ -126,8 +137,8 @@ class NewProductDesktopState extends State<NewProductDesktop> {
 
             String searchNameforId(
                 int id, List<Map<String, dynamic>> categories) {
-              var category =
-                  categories.firstWhere((category) => category['id_category'] == id);
+              var category = categories
+                  .firstWhere((category) => category['id_category'] == id);
               return category['name'];
             }
 
@@ -142,231 +153,371 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                           const SizedBox(
                             height: 20,
                           ),
-                          Stack(
-                            children: [
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: IconButton(
-                                  icon: const Icon(Icons.arrow_back),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ),
-                              const Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  'Elige categoria',
-                                  style: TextStyle(
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ],
-                          ),
                           Padding(
-                              padding: const EdgeInsets.only(top: 10),
-                              child: ElevatedButton(
-                                onPressed: () async {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        title:
-                                            const Text('Crear nueva categoría'),
-                                        content: SizedBox(
-                                          height: 60,
-                                          width: 200,
-                                          child: Form(
-                                            key: formKeyInputCategorie,
-                                            child: TextFormField(
-                                              controller: categoryInput,
-                                              decoration: const InputDecoration(
-                                                labelText:
-                                                    'Nombre de la categoría',
-                                              ),
-                                              inputFormatters: [
-                                                MyCustomFormatter()
-                                              ],
-                                              validator: (value) {
-                                                if (value!.isEmpty) {
-                                                  return 'Por favor, introduce el nombre de la categoría';
-                                                } else if (categories.any(
-                                                    (category) =>
-                                                        category['name']
-                                                                .toLowerCase() ==
-                                                            value
-                                                                .toLowerCase() &&
-                                                        category['id_padre'] ==
-                                                            null)) {
-                                                  return 'Esta categoría ya existe';
-                                                }
-                                                return null;
-                                              },
-                                            ),
-                                          ),
+                            padding: const EdgeInsets.only(bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 15),
+                                  child: Row(
+                                    children: [
+                                      IconButton(
+                                        icon: const Icon(Icons.arrow_back),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(left: 15),
+                                        child: Text(
+                                          'Elige una categoria',
+                                          style: TextStyle(
+                                              fontSize: 25,
+                                              fontWeight: FontWeight.bold),
                                         ),
-                                        actions: [
-                                          TextButton(
-                                            child: const Text('Cancelar'),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                          TextButton(
-                                            child: const Text('Enviar'),
-                                            onPressed: () async {
-                                              if (formKeyInputCategorie
-                                                  .currentState!
-                                                  .validate()) {
-                                                final response =
-                                                    await http.post(
-                                                  Uri.parse(
-                                                      'http:$ipPort/created_category'),
-                                                  body: {
-                                                    'category':
-                                                        categoryInput.text
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 15),
+                                  child: InkWell(
+                                    onTap: () async {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            backgroundColor: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(
+                                                  5), // Aquí puedes cambiar el radio de los bordes
+                                            ),
+                                            title: const Text(
+                                                'Crear nueva categoría'),
+                                            content: SizedBox(
+                                              height: 60,
+                                              width: 200,
+                                              child: Form(
+                                                key: formKeyInputCategorie,
+                                                child: TextFormField(
+                                                  controller: categoryInput,
+                                                  decoration:
+                                                      const InputDecoration(
+                                                    labelText:
+                                                        'Nombre de la categoría',
+                                                  ),
+                                                  inputFormatters: [
+                                                    MyCustomFormatter()
+                                                  ],
+                                                  validator: (value) {
+                                                    if (value!.isEmpty) {
+                                                      return 'Por favor, introduce el nombre de la categoría';
+                                                    } else if (categories.any(
+                                                        (category) =>
+                                                            category['name']
+                                                                    .toLowerCase() ==
+                                                                value
+                                                                    .toLowerCase() &&
+                                                            category[
+                                                                    'id_padre'] ==
+                                                                null)) {
+                                                      return 'Esta categoría ya existe';
+                                                    }
+                                                    return null;
                                                   },
-                                                );
-                                                if (response.statusCode ==
-                                                    200) {
-                                                  snackBarMessaging.showOverlay(context, 'Categoria creada con exito', Colors.green);
-                                                } else {
-                                                  snackBarMessaging.showOverlay(context, 'Error al crear categoria', Colors.red);
-                                                }
-                                                Navigator.of(context).pop();
-                                              } else {
-                                                categoryInput.clear();
-                                              }
-                                            },
-                                          ),
-                                        ],
+                                                ),
+                                              ),
+                                            ),
+                                            actions: [
+                                              ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor:Theme.of(context).hintColor,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                    BorderRadius
+                                                        .circular(5),
+                                                  ), ),
+                                                child: const Text('Cancelar'),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                              ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor:Theme.of(context).primaryColor,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                    BorderRadius
+                                                        .circular(5),
+                                                  ), ),
+                                                child: const Text('Enviar'),
+                                                onPressed: () async {
+                                                  if (formKeyInputCategorie
+                                                      .currentState!
+                                                      .validate()) {
+                                                    final response =
+                                                        await http.post(
+                                                      Uri.parse(
+                                                          'http:$ipPort/created_category'),
+                                                      body: {
+                                                        'category':
+                                                            categoryInput.text
+                                                      },
+                                                    );
+                                                    if (response.statusCode ==
+                                                        200) {
+                                                      snackBarMessaging.showOverlay(
+                                                          context,
+                                                          'Categoria creada con exito',
+                                                          Colors.green);
+                                                    } else {
+                                                      snackBarMessaging.showOverlay(
+                                                          context,
+                                                          'Error al crear categoria',
+                                                          Colors.red);
+                                                    }
+                                                    Navigator.of(context).pop();
+                                                  } else {
+                                                    categoryInput.clear();
+                                                  }
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        },
                                       );
                                     },
-                                  );
-                                },
-                                child: const Text('Agregar nueva categoría'),
-                              )),
+                                    child: Container(
+                                      height: 30,
+                                      width: 150,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        gradient: LinearGradient(
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                          colors: [
+                                            Theme.of(context).hintColor,
+                                            Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary
+                                          ],
+                                        ),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(right: 5),
+                                            child: Icon(
+                                              Icons.add_box_outlined,
+                                              size: 18,
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium
+                                                  ?.color,
+                                            ),
+                                          ),
+                                          const Text('nueva categoría'),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ] else ...[
                           const SizedBox(
                             height: 20,
                           ),
-                          Stack(
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: IconButton(
-                                  icon: const Icon(Icons.arrow_back),
-                                  onPressed: () {
-                                    setState(() {
-                                      stack.removeLast();
-                                    });
-                                  },
+                              Padding(
+                                padding: const EdgeInsets.only(left: 15),
+                                child: Row(
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(Icons.arrow_back),
+                                      onPressed: () {
+                                        setState(() {
+                                          stack.removeLast();
+                                        });
+                                      },
+                                    ),
+                                    const Padding(
+                                      padding: EdgeInsets.only(left: 15),
+                                      child: Text(
+                                        'Sub-categorías',
+                                        style: TextStyle(
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              const Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  'Sub-categorías',
-                                  style: TextStyle(
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 15),
+                                child: InkWell(
+                                  onTap: () async {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          backgroundColor: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                5), // Aquí puedes cambiar el radio de los bordes
+                                          ),
+                                          title: const Text(
+                                              'Crear nueva subcategoría'),
+                                          content: SizedBox(
+                                            height: 60,
+                                            width: 200,
+                                            child: Form(
+                                              key: formKeyInputCategorie,
+                                              child: TextFormField(
+                                                controller: subCategoryInput,
+                                                decoration:
+                                                    const InputDecoration(
+                                                  labelText:
+                                                      'Nombre de la subcategoría',
+                                                ),
+                                                inputFormatters: [
+                                                  MyCustomFormatter()
+                                                ],
+                                                validator: (value) {
+                                                  if (value!.isEmpty) {
+                                                    return 'Por favor, introduce el nombre de la subcategoría';
+                                                  } else if (categories.any(
+                                                      (subcategory) =>
+                                                          subcategory['name']
+                                                                  .toLowerCase() ==
+                                                              value
+                                                                  .toLowerCase() &&
+                                                          subcategory[
+                                                                  'id_padre'] ==
+                                                              stack.last)) {
+                                                    return 'Esta subcategoría ya existe';
+                                                  }
+                                                  return null;
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                          actions: [
+                                            ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor:Theme.of(context).hintColor,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                  BorderRadius
+                                                      .circular(5),
+                                                ), ),
+                                              child: const Text('Cancelar'),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                            ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor:Theme.of(context).primaryColor,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                  BorderRadius
+                                                      .circular(5),
+                                                ), ),
+                                              child: const Text('Enviar'),
+                                              onPressed: () async {
+                                                if (formKeyInputCategorie
+                                                    .currentState!
+                                                    .validate()) {
+                                                  final response =
+                                                      await http.post(
+                                                    Uri.parse(
+                                                        'http:$ipPort/created_category'),
+                                                    body: {
+                                                      'category':
+                                                          subCategoryInput.text,
+                                                      'id_padre':
+                                                          stack.last.toString(),
+                                                    },
+                                                  );
+                                                  if (response.statusCode ==
+                                                      200) {
+                                                    subCategoryInput.clear();
+                                                    Navigator.of(context).pop();
+                                                  }
+                                                } else {
+                                                  subCategoryInput.clear();
+                                                }
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                  child: Container(
+                                    height: 30,
+                                    width: 170,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                        colors: [
+                                          Theme.of(context).hintColor,
+                                          Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary
+                                        ],
+                                      ),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 5),
+                                          child: Icon(
+                                            Icons.add_box_outlined,
+                                            size: 18,
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.color,
+                                          ),
+                                        ),
+                                        const Text('nueva sub-categoría'),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ),
                             ],
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 15),
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: const Text(
-                                          'Crear nueva subcategoría'),
-                                      content: SizedBox(
-                                        height: 60,
-                                        width: 200,
-                                        child: Form(
-                                          key: formKeyInputCategorie,
-                                          child: TextFormField(
-                                            controller: subCategoryInput,
-                                            decoration: const InputDecoration(
-                                              labelText:
-                                                  'Nombre de la subcategoría',
-                                            ),
-                                            inputFormatters: [
-                                              MyCustomFormatter()
-                                            ],
-                                            validator: (value) {
-                                              if (value!.isEmpty) {
-                                                return 'Por favor, introduce el nombre de la subcategoría';
-                                              } else if (categories.any(
-                                                  (subcategory) =>
-                                                      subcategory['name']
-                                                              .toLowerCase() ==
-                                                          value.toLowerCase() &&
-                                                      subcategory[
-                                                              'id_padre'] ==
-                                                          stack.last)) {
-                                                return 'Esta subcategoría ya existe';
-                                              }
-                                              return null;
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          child: const Text('Cancelar'),
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                        ),
-                                        TextButton(
-                                          child: const Text('Enviar'),
-                                          onPressed: () async {
-                                            if (formKeyInputCategorie
-                                                .currentState!
-                                                .validate()) {
-                                              final response = await http.post(
-                                                Uri.parse(
-                                                    'http:$ipPort/create_category'),
-                                                body: {
-                                                  'category':
-                                                      subCategoryInput.text,
-                                                  'id_padre':
-                                                      stack.last.toString(),
-                                                },
-                                              );
-                                              if (response.statusCode == 200) {
-                                                subCategoryInput.clear();
-                                                Navigator.of(context).pop();
-                                              }
-                                            } else {
-                                              subCategoryInput.clear();
-                                            }
-                                          },
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              },
-                              child: const Text('Agregar nueva subcategoría'),
+                          const Padding(
+                            padding: EdgeInsets.only(top: 5),
+                            child: Text(
+                              'Categoría seleccionada',
                             ),
                           ),
-                          const Text(
-                            'Categoría seleccionada',
-                          ),
                           Padding(
-                            padding: const EdgeInsets.only(top: 5),
+                            padding: const EdgeInsets.only(top: 5, bottom: 15),
                             child: Text(
                               '${categorySelect['name']}',
                               style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
+                                  fontSize: 20, fontWeight: FontWeight.bold),
                             ),
                           ),
                         ],
@@ -378,49 +529,59 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                               if (categories.isEmpty) {
                                 return const Center(
                                     child: Padding(
-                                      padding: EdgeInsets.only(top: 15),
-                                      child: Text(
-                                                                        'No hay categorias',
-                                                                        style: TextStyle(
+                                  padding: EdgeInsets.only(top: 15),
+                                  child: Text(
+                                    'No hay categorias',
+                                    style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.w400),
-                                                                      ),
-                                    ));
+                                  ),
+                                ));
                               } else {
                                 return ListTile(
                                   title: Text(categories[index]['name']),
                                   onTap: () {
                                     setState(() {
-                                      stack.add(categories[index]['id_category']);
+                                      stack.add(
+                                          categories[index]['id_category']);
                                       categorySelect = categories[index];
                                     });
                                   },
                                   trailing: IconButton(
-                                    icon: const Icon(Icons.delete),
+                                    icon: Icon(
+                                      Icons.delete,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.color,
+                                    ),
                                     onPressed: () {
                                       showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
                                           return AlertDialog(
+                                            backgroundColor: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
                                             shape: const RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(5))),
                                             title: const Column(
                                               children: [
                                                 Text(
-                                                    '¿Seguro que quieres eliminar esta categoria?',
+                                                  '¿Seguro que quieres eliminar esta categoria?',
                                                   style: TextStyle(
-                                                    fontWeight: FontWeight.bold
-                                                  ),
+                                                      fontWeight:
+                                                          FontWeight.bold),
                                                 ),
                                                 Padding(
-                                                  padding: EdgeInsets.only(top: 15),
+                                                  padding:
+                                                      EdgeInsets.only(top: 15),
                                                   child: Text(
                                                     'Al eliminar una categoria todos los productos\n asociados a este se eliminaran',
                                                     textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      fontSize: 18
-                                                    ),
+                                                    style:
+                                                        TextStyle(fontSize: 18),
                                                   ),
                                                 ),
                                               ],
@@ -432,12 +593,22 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                                 ElevatedButton(
                                                   style:
                                                       ElevatedButton.styleFrom(
-                                                          backgroundColor:
-                                                              Colors.blue),
+                                                    backgroundColor:
+                                                        Theme.of(context)
+                                                            .primaryColor,
+                                                    shadowColor:
+                                                        Theme.of(context)
+                                                            .colorScheme
+                                                            .onSurface,
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5)),
+                                                  ),
                                                   child: const Text(
                                                     'Sí',
-                                                    style: TextStyle(
-                                                        color: Colors.white),
                                                   ),
                                                   onPressed: () async {
                                                     final response =
@@ -445,7 +616,8 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                                       Uri.parse(
                                                           'http:$ipPort/delete_category'),
                                                       body: {
-                                                        'id_category': categories[index]
+                                                        'id_category': categories[
+                                                                    index]
                                                                 ['id_category']
                                                             .toString(),
                                                       },
@@ -454,23 +626,37 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                                     if (response.statusCode ==
                                                         200) {
                                                       Navigator.pop(context);
-                                                      snackBarMessaging.showOverlay(context, 'Categoira eliminada con exito', Colors.green);
-
+                                                      snackBarMessaging.showOverlay(
+                                                          context,
+                                                          'Categoira eliminada con exito',
+                                                          Colors.green);
                                                     } else {
                                                       Navigator.pop(context);
-                                                      snackBarMessaging.showOverlay(context, 'Error al eliminar categoria', Colors.red);
+                                                      snackBarMessaging.showOverlay(
+                                                          context,
+                                                          'Error al eliminar categoria',
+                                                          Colors.red);
                                                     }
                                                   },
                                                 ),
                                                 ElevatedButton(
                                                   style:
                                                       ElevatedButton.styleFrom(
-                                                          backgroundColor:
-                                                              Colors.black),
+                                                    backgroundColor:
+                                                        Colors.black,
+                                                    shadowColor:
+                                                        Theme.of(context)
+                                                            .colorScheme
+                                                            .onSurface,
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5)),
+                                                  ),
                                                   child: const Text(
                                                     'No',
-                                                    style: TextStyle(
-                                                        color: Colors.white),
                                                   ),
                                                   onPressed: () {
                                                     Navigator.of(context).pop();
@@ -496,8 +682,11 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: stack.last == null
-                              ? Colors.purple[100]
-                              : Colors.purple[800],
+                              ? Theme.of(context).hintColor
+                              : Theme.of(context).primaryColor,
+                          shadowColor: Theme.of(context).colorScheme.onSurface,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
                         ),
                         onPressed: () {
                           if (stack.last != null) {
@@ -555,7 +744,9 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                             )
                           ],
                         ),
-                        for(int modelIndex = 0; modelIndex < mdcp.length; modelIndex++)
+                        for (int modelIndex = 0;
+                            modelIndex < mdcp.length;
+                            modelIndex++)
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -575,8 +766,7 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                         decoration: BoxDecoration(
                                             color: Colors.grey[300],
                                             borderRadius:
-                                            BorderRadius.circular(
-                                                10)),
+                                                BorderRadius.circular(10)),
                                         child: const Icon(
                                           Icons.delete,
                                           size: 15,
@@ -584,18 +774,21 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                       ),
                                     ),
                                     const Padding(
-                                      padding: EdgeInsets.only(left: 10, right: 5),
-                                      child: Text('Modelo: ',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w700
-                                      ),),
+                                      padding:
+                                          EdgeInsets.only(left: 10, right: 5),
+                                      child: Text(
+                                        'Modelo: ',
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w700),
+                                      ),
                                     ),
-                                    Text(mdcp[modelIndex]['model'],
+                                    Text(
+                                      mdcp[modelIndex]['model'],
                                       style: const TextStyle(
                                           fontSize: 20,
-                                          fontWeight: FontWeight.w500
-                                      ),),
+                                          fontWeight: FontWeight.w500),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -606,21 +799,24 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                   children: [
                                     Expanded(
                                       child: Padding(
-                                        padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
+                                        padding: const EdgeInsets.only(
+                                            left: 15, right: 15, top: 15),
                                         child: TextFormField(
                                           inputFormatters: [
-                                            FilteringTextInputFormatter.digitsOnly,
+                                            FilteringTextInputFormatter
+                                                .digitsOnly,
                                           ],
                                           controller: height[modelIndex],
                                           decoration: InputDecoration(
-                                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                                            floatingLabelBehavior:
+                                                FloatingLabelBehavior.always,
                                             labelText: 'Altura',
                                             suffixText: 'H',
                                             suffixStyle: const TextStyle(
-                                                color: Colors.black
-                                            ),
+                                                color: Colors.black),
                                             border: OutlineInputBorder(
-                                              borderRadius: BorderRadius.circular(8),
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
                                             ),
                                           ),
                                           keyboardType: TextInputType.number,
@@ -629,21 +825,24 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                     ),
                                     Expanded(
                                       child: Padding(
-                                        padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
+                                        padding: const EdgeInsets.only(
+                                            left: 15, right: 15, top: 15),
                                         child: TextFormField(
                                           inputFormatters: [
-                                            FilteringTextInputFormatter.digitsOnly,
+                                            FilteringTextInputFormatter
+                                                .digitsOnly,
                                           ],
                                           controller: width[modelIndex],
                                           decoration: InputDecoration(
-                                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                                            floatingLabelBehavior:
+                                                FloatingLabelBehavior.always,
                                             labelText: 'Ancho',
                                             suffixText: 'W',
                                             suffixStyle: const TextStyle(
-                                                color: Colors.black
-                                            ),
+                                                color: Colors.black),
                                             border: OutlineInputBorder(
-                                              borderRadius: BorderRadius.circular(8),
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
                                             ),
                                           ),
                                           keyboardType: TextInputType.number,
@@ -652,21 +851,24 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                     ),
                                     Expanded(
                                       child: Padding(
-                                        padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
+                                        padding: const EdgeInsets.only(
+                                            left: 15, right: 15, top: 15),
                                         child: TextFormField(
                                           inputFormatters: [
-                                            FilteringTextInputFormatter.digitsOnly,
+                                            FilteringTextInputFormatter
+                                                .digitsOnly,
                                           ],
                                           controller: depth[modelIndex],
                                           decoration: InputDecoration(
-                                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                                            floatingLabelBehavior:
+                                                FloatingLabelBehavior.always,
                                             labelText: 'Profundida',
                                             suffixText: 'D',
                                             suffixStyle: const TextStyle(
-                                                color: Colors.black
-                                            ),
+                                                color: Colors.black),
                                             border: OutlineInputBorder(
-                                              borderRadius: BorderRadius.circular(8),
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
                                             ),
                                           ),
                                           keyboardType: TextInputType.number,
@@ -675,21 +877,24 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                     ),
                                     Expanded(
                                       child: Padding(
-                                        padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
+                                        padding: const EdgeInsets.only(
+                                            left: 15, right: 15, top: 15),
                                         child: TextFormField(
                                           inputFormatters: [
-                                            FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
+                                            FilteringTextInputFormatter.allow(
+                                                RegExp(r'^\d*\.?\d*')),
                                           ],
                                           controller: weight[modelIndex],
                                           decoration: InputDecoration(
-                                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                                            floatingLabelBehavior:
+                                                FloatingLabelBehavior.always,
                                             labelText: 'Peso',
                                             suffixText: 'Kg',
                                             suffixStyle: const TextStyle(
-                                                color: Colors.black
-                                            ),
+                                                color: Colors.black),
                                             border: OutlineInputBorder(
-                                              borderRadius: BorderRadius.circular(8),
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
                                             ),
                                           ),
                                           keyboardType: TextInputType.number,
@@ -698,49 +903,61 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                     ),
                                   ],
                                 ),
-                              ),// dimensiones
-                              for (int colorIndex = 0; colorIndex < mdcp[modelIndex]['colors'].length; colorIndex++)
-                              Align(
+                              ), // dimensiones
+                              for (int colorIndex = 0;
+                                  colorIndex <
+                                      mdcp[modelIndex]['colors'].length;
+                                  colorIndex++)
+                                Align(
                                   alignment: Alignment.centerLeft,
                                   child: SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
                                     child: Padding(
-                                      padding:
-                                      const EdgeInsets.only(top: 15, right: 15),
+                                      padding: const EdgeInsets.only(
+                                          top: 15, right: 15),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
                                         children: [
                                           Padding(
-                                            padding: const EdgeInsets.only(right: 10),
+                                            padding: const EdgeInsets.only(
+                                                right: 10),
                                             child: SizedBox(
                                               height: 170,
                                               child: Column(
                                                 children: [
                                                   const Padding(
-                                                    padding:
-                                                    EdgeInsets.only(bottom: 5),
+                                                    padding: EdgeInsets.only(
+                                                        bottom: 5),
                                                     child: Text(
                                                       'eliminar \n producto',
-                                                      textAlign: TextAlign.center,
+                                                      textAlign:
+                                                          TextAlign.center,
                                                     ),
                                                   ),
                                                   Padding(
-                                                    padding: const EdgeInsets.only(
-                                                        bottom: 10),
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            bottom: 10),
                                                     child: InkWell(
                                                       onTap: () {
                                                         setState(() {
-                                                          mdcp[modelIndex]['colors'].removeAt(colorIndex);
+                                                          mdcp[modelIndex]
+                                                                  ['colors']
+                                                              .removeAt(
+                                                                  colorIndex);
                                                         });
                                                       },
                                                       child: Container(
                                                         height: 20,
                                                         width: 20,
                                                         decoration: BoxDecoration(
-                                                            color: Colors.grey[300],
+                                                            color: Colors
+                                                                .grey[300],
                                                             borderRadius:
-                                                            BorderRadius.circular(
-                                                                10)),
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10)),
                                                         child: const Icon(
                                                           Icons.delete,
                                                           size: 15,
@@ -753,25 +970,44 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                                         top: 10, bottom: 5),
                                                     child: Text(
                                                       'Agregar \n color',
-                                                      textAlign: TextAlign.center,
+                                                      textAlign:
+                                                          TextAlign.center,
                                                     ),
                                                   ),
                                                   InkWell(
                                                     onTap: () async {
                                                       await showDialog(
                                                         context: context,
-                                                        builder:
-                                                            (BuildContext context) {
+                                                        builder: (BuildContext
+                                                            context) {
                                                           return AlertDialog(
+                                                            backgroundColor:
+                                                                Theme.of(
+                                                                        context)
+                                                                    .colorScheme
+                                                                    .primary,
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          5), // Aquí puedes cambiar el radio de los bordes
+                                                            ),
                                                             content:
-                                                            SingleChildScrollView(
-                                                              child: BlockPicker(
+                                                                SingleChildScrollView(
+                                                              child:
+                                                                  BlockPicker(
                                                                 pickerColor:
-                                                                Colors.white,
+                                                                    Colors
+                                                                        .white,
                                                                 onColorChanged:
                                                                     (color) {
                                                                   setState(() {
-                                                                    mdcp[modelIndex]['colors'][colorIndex]['color'] = color.value;
+                                                                    mdcp[modelIndex]['colors'][colorIndex]
+                                                                            [
+                                                                            'color'] =
+                                                                        color
+                                                                            .value;
                                                                   });
                                                                   Navigator.pop(
                                                                       context);
@@ -783,19 +1019,28 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                                       );
                                                     },
                                                     child: Padding(
-                                                      padding: const EdgeInsets.only(
-                                                          right: 15, left: 15),
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              right: 15,
+                                                              left: 15),
                                                       child: Container(
                                                         height: 40,
                                                         width: 40,
-                                                        decoration: BoxDecoration(
+                                                        decoration:
+                                                            BoxDecoration(
                                                           borderRadius:
-                                                          BorderRadius.circular(
-                                                              5),
+                                                              BorderRadius
+                                                                  .circular(5),
                                                           border: Border.all(
                                                               width: 1,
-                                                              color: Colors.grey),
-                                                          color: Color(mdcp[modelIndex]['colors'][colorIndex]['color']),
+                                                              color:
+                                                                  Colors.grey),
+                                                          color: Color(
+                                                              mdcp[modelIndex][
+                                                                          'colors']
+                                                                      [
+                                                                      colorIndex]
+                                                                  ['color']),
                                                         ),
                                                       ),
                                                     ),
@@ -804,17 +1049,26 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                               ),
                                             ),
                                           ),
-                                          for (int photoIndex = 0; photoIndex < mdcp[modelIndex]['colors'][colorIndex]['photos'].length; photoIndex++)
+                                          for (int photoIndex = 0;
+                                              photoIndex <
+                                                  mdcp[modelIndex]['colors']
+                                                          [colorIndex]['photos']
+                                                      .length;
+                                              photoIndex++)
                                             Padding(
-                                              padding:
-                                              const EdgeInsets.only(right: 15),
+                                              padding: const EdgeInsets.only(
+                                                  right: 15),
                                               child: Stack(
                                                 children: [
                                                   ClipRRect(
                                                     borderRadius:
-                                                    BorderRadius.circular(5),
+                                                        BorderRadius.circular(
+                                                            5),
                                                     child: Image.memory(
-                                                      mdcp[modelIndex]['colors'][colorIndex]['photos'][photoIndex]['bytes'],
+                                                      mdcp[modelIndex]['colors']
+                                                                  [colorIndex]
+                                                              ['photos']
+                                                          [photoIndex]['bytes'],
                                                       height: 150,
                                                       width: 150,
                                                       fit: BoxFit.cover,
@@ -826,17 +1080,25 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                                     child: InkWell(
                                                       onTap: () {
                                                         setState(() {
-                                                          mdcp[modelIndex]['colors'][colorIndex]['photos'].removeAt(photoIndex);
+                                                          mdcp[modelIndex][
+                                                                          'colors']
+                                                                      [
+                                                                      colorIndex]
+                                                                  ['photos']
+                                                              .removeAt(
+                                                                  photoIndex);
                                                         });
                                                       },
                                                       child: Container(
                                                         height: 20,
                                                         width: 20,
                                                         decoration: BoxDecoration(
-                                                            color: Colors.grey[300],
+                                                            color: Colors
+                                                                .grey[300],
                                                             borderRadius:
-                                                            BorderRadius.circular(
-                                                                10)),
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10)),
                                                         child: const Icon(
                                                           Icons.close,
                                                           size: 15,
@@ -847,7 +1109,7 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                                 ],
                                               ),
                                             ),
-                                            Container(
+                                          Container(
                                             height: 150,
                                             width: 150,
                                             decoration: BoxDecoration(
@@ -855,11 +1117,12 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                                 width: 1,
                                                 color: Colors.grey,
                                               ),
-                                              borderRadius: BorderRadius.circular(5),
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
                                             ),
                                             child: IconButton(
-                                              onPressed: () =>
-                                                  selectPhoto(colorIndex, modelIndex),
+                                              onPressed: () => selectPhoto(
+                                                  colorIndex, modelIndex),
                                               icon: const Icon(
                                                   Icons.add_photo_alternate,
                                                   color: Color(0xff616161)),
@@ -871,7 +1134,8 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                   ),
                                 ),
                               Padding(
-                                padding: const EdgeInsets.only(left: 15, top: 10),
+                                padding:
+                                    const EdgeInsets.only(left: 15, top: 10),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
@@ -894,7 +1158,8 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                             });
                                           });
                                         },
-                                        icon: const Icon(Icons.add_photo_alternate,
+                                        icon: const Icon(
+                                            Icons.add_photo_alternate,
                                             color: Color(0xff616161)),
                                       ),
                                     ),
@@ -915,78 +1180,133 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                           child: Padding(
                             padding: const EdgeInsets.all(15),
                             child: ElevatedButton(
-                              onPressed: (){
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title:
-                                    const Text('Crea un nuevo modelo'),
-                                    content: SizedBox(
-                                      height: 60,
-                                      width: 200,
-                                      child: Form(
-                                        key: formKeyInputModel,
-                                        child: TextFormField(
-                                          inputFormatters: [
-                                            CapitalizeFirstLetterTextFormatter()
-                                          ],
-                                          controller: model,
-                                          decoration: InputDecoration(
-                                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                                            labelText: 'Modelo',
-                                            border: OutlineInputBorder(
-                                              borderRadius: BorderRadius.circular(8),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Theme.of(context).primaryColor,
+                                shadowColor:
+                                    Theme.of(context).colorScheme.onSurface,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5)),
+                              ),
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            5), // Aquí puedes cambiar el radio de los bordes
+                                      ),
+                                      backgroundColor:
+                                          Theme.of(context).colorScheme.primary,
+                                      title: const Text('Crea un nuevo modelo'),
+                                      content: SizedBox(
+                                        height: 60,
+                                        width: 200,
+                                        child: Form(
+                                          key: formKeyInputModel,
+                                          child: TextFormField(
+                                            inputFormatters: [
+                                              CapitalizeFirstLetterTextFormatter()
+                                            ],
+                                            controller: model,
+                                            decoration: InputDecoration(
+                                              floatingLabelBehavior:
+                                                  FloatingLabelBehavior.always,
+                                              labelText: 'Modelo',
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                              ),
                                             ),
+                                            validator: (value) {
+                                              if (value!.isEmpty) {
+                                                return 'Este campo es obligatorio';
+                                              } else if (mdcp.any((map) =>
+                                                  map['model']
+                                                      .trim()
+                                                      .toLowerCase() ==
+                                                  value.trim().toLowerCase())) {
+                                                return 'El modelo ya existe en la lista';
+                                              }
+                                              return null;
+                                            },
                                           ),
-                                          validator: (value) {
-                                            if (value!.isEmpty) {
-                                              return 'Este campo es obligatorio';
-                                            } else if (mdcp.any((map) => map['model'].trim().toLowerCase() == value.trim().toLowerCase())) {
-                                              return 'El modelo ya existe en la lista';
-                                            }
-                                            return null;
-                                          },
                                         ),
                                       ),
-                                    ),
-                                    actions: [
-                                      TextButton(
-                                        child: const Text('Cancelar'),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
-                                      TextButton(
-                                        child: const Text('Agregar'),
-                                        onPressed: () async {
-                                         if (formKeyInputModel.currentState!.validate()) {
-                                           setState(() {
-                                            mdcp.add({
-                                                'model': model.text,
-                                                'dimensions': {'height': '', 'width': '', 'depth': '', 'weight': ''},
-                                                'colors': [{'color': Colors.white.value, 'photos': []}]
-                                            });
+                                      actions: [
+                                        ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:Theme.of(context).hintColor,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                              BorderRadius
+                                                  .circular(5),
+                                            ), ),
+                                          child: const Text(
+                                            'Cancelar',
+                                          ),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                        ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:Theme.of(context).primaryColor,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                              BorderRadius
+                                                  .circular(5),
+                                            ), ),
+                                          child: Text(
+                                            'Agregar',
+                                          ),
+                                          onPressed: () async {
+                                            if (formKeyInputModel.currentState!
+                                                .validate()) {
+                                              setState(() {
+                                                mdcp.add({
+                                                  'model': model.text,
+                                                  'dimensions': {
+                                                    'height': '',
+                                                    'width': '',
+                                                    'depth': '',
+                                                    'weight': ''
+                                                  },
+                                                  'colors': [
+                                                    {
+                                                      'color':
+                                                          Colors.white.value,
+                                                      'photos': []
+                                                    }
+                                                  ]
+                                                });
 
-                                            height.add(TextEditingController());
-                                            width.add(TextEditingController());
-                                            depth.add(TextEditingController());
-                                            weight.add(TextEditingController());
+                                                height.add(
+                                                    TextEditingController());
+                                                width.add(
+                                                    TextEditingController());
+                                                depth.add(
+                                                    TextEditingController());
+                                                weight.add(
+                                                    TextEditingController());
 
-                                            model.clear();
-                                            Navigator.pop(context);
-                                          });
-                                         }
-                                        },
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            },
-                              child:  mdcp.isEmpty ? Text('Agregar modelo') : Text('Agregar Nuevo modelo'),),
+                                                model.clear();
+                                                Navigator.pop(context);
+                                              });
+                                            }
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              child: mdcp.isEmpty
+                                  ? Text('Agregar modelo')
+                                  : Text('Agregar Nuevo modelo'),
+                            ),
                           ),
-                        ),// boton agregar
+                        ), // boton agregar
                         Padding(
                           padding: const EdgeInsets.only(
                               left: 15, top: 15, right: 15),
@@ -996,7 +1316,8 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                             ],
                             controller: name,
                             decoration: InputDecoration(
-                              floatingLabelBehavior: FloatingLabelBehavior.always,
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.always,
                               labelText: 'Nombre',
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
@@ -1009,7 +1330,7 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                               return null;
                             },
                           ),
-                        ),// nombre
+                        ), // nombre
                         Padding(
                           padding: const EdgeInsets.only(
                               left: 15, top: 15, right: 15),
@@ -1023,7 +1344,8 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.always,
                             ),
                             validator: (value) {
                               if (value!.isEmpty) {
@@ -1034,7 +1356,7 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                             minLines: 5,
                             maxLines: null,
                           ),
-                        ),// descripcion
+                        ), // descripcion
                         SizedBox(
                           width: 600,
                           height: 80,
@@ -1046,21 +1368,21 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                       left: 15, right: 15, top: 15),
                                   child: TextFormField(
                                     inputFormatters: [
-                                      FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'^\d*\.?\d*')),
                                     ],
                                     controller: priceUnit,
                                     decoration: InputDecoration(
-                                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                                      floatingLabelBehavior:
+                                          FloatingLabelBehavior.always,
                                       labelText: 'Precio unitario',
                                       suffixText: '\$',
-                                      suffixStyle: const TextStyle(
-                                          color: Colors.black
-                                      ),
+                                      suffixStyle:
+                                          const TextStyle(color: Colors.black),
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                     ),
-
                                     keyboardType: TextInputType.number,
                                     validator: (value) {
                                       if (value!.isEmpty) {
@@ -1070,75 +1392,84 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                     },
                                   ),
                                 ),
-                              ),// precio unitario
+                              ), // precio unitario
                               Expanded(
                                 child: Padding(
                                   padding: const EdgeInsets.only(
                                       left: 15, right: 15, top: 15),
                                   child: TextFormField(
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
-                                    ],
-                                    controller: priceWholesale,
-                                    decoration: InputDecoration(
-                                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                                      labelText: 'precio al mayor',
-                                      suffixText: '\$',
-                                      suffixStyle: const TextStyle(
-                                          color: Colors.black
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.allow(
+                                            RegExp(r'^\d*\.?\d*')),
+                                      ],
+                                      controller: priceWholesale,
+                                      decoration: InputDecoration(
+                                        floatingLabelBehavior:
+                                            FloatingLabelBehavior.always,
+                                        labelText: 'precio al mayor',
+                                        suffixText: '\$',
+                                        suffixStyle: const TextStyle(
+                                            color: Colors.black),
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
                                       ),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                    ),
-                                    keyboardType: TextInputType.number,
+                                      keyboardType: TextInputType.number,
                                       validator: (value) {
                                         if (value!.isEmpty) {
                                           return null; // No hay error si el valor está vacío
-                                        } else if (double.parse(value) > double.parse(priceUnit.text)) {
+                                        } else if (double.parse(value) >
+                                            double.parse(priceUnit.text)) {
                                           return 'Debes agregar un precio por unidad menor o igual al precio unitario';
                                         }
                                         return null;
-                                      }
-                                  ),
+                                      }),
                                 ),
-                              ),// precio al mayor
+                              ), // precio al mayor
                               Expanded(
                                 child: Padding(
                                   padding: const EdgeInsets.only(
                                       left: 15, right: 15, top: 15),
                                   child: TextFormField(
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
-                                    ],
-                                    controller: priceCost,
-                                    decoration: InputDecoration(
-                                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                                      labelText: 'Costo del producto',
-                                      suffixText: '\$',
-                                      suffixStyle: const TextStyle(
-                                          color: Colors.black
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.allow(
+                                            RegExp(r'^\d*\.?\d*')),
+                                      ],
+                                      controller: priceCost,
+                                      decoration: InputDecoration(
+                                        floatingLabelBehavior:
+                                            FloatingLabelBehavior.always,
+                                        labelText: 'Costo del producto',
+                                        suffixText: '\$',
+                                        suffixStyle: const TextStyle(
+                                            color: Colors.black),
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
                                       ),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                    ),
-                                    keyboardType: TextInputType.number,
+                                      keyboardType: TextInputType.number,
                                       validator: (value) {
                                         if (value!.isEmpty) {
                                           return null; // No hay error si el valor está vacío
-                                        } else if ((priceUnit.text.isNotEmpty && double.parse(value) > double.parse(priceUnit.text)) ||
-                                            (priceWholesale.text.isNotEmpty && double.parse(value) > double.parse(priceWholesale.text))) {
+                                        } else if ((priceUnit.text.isNotEmpty &&
+                                                double.parse(value) >
+                                                    double.parse(
+                                                        priceUnit.text)) ||
+                                            (priceWholesale.text.isNotEmpty &&
+                                                double.parse(value) >
+                                                    double.parse(
+                                                        priceWholesale.text))) {
                                           return 'Debes agregar un precio por unidad menor al precio unitario y menor al precio al por mayor';
                                         }
                                         return null;
-                                      }
-                                  ),
+                                      }),
                                 ),
-                              ),// costo producto
+                              ), // costo producto
                             ],
                           ),
-                        ),// precios
+                        ), // precios
                         SizedBox(
                           width: 600,
                           height: 80,
@@ -1154,7 +1485,8 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                     ],
                                     controller: quantity,
                                     decoration: InputDecoration(
-                                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                                      floatingLabelBehavior:
+                                          FloatingLabelBehavior.always,
                                       labelText: 'Cantidad de productos',
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(8),
@@ -1169,72 +1501,76 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                     },
                                   ),
                                 ),
-                              ),// cantidad de producto
+                              ), // cantidad de producto
                               Expanded(
                                 child: Padding(
                                   padding: const EdgeInsets.only(
                                       left: 15, right: 15, top: 15),
                                   child: TextFormField(
                                     inputFormatters: [
-                                      FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'^\d*\.?\d*')),
                                     ],
                                     controller: discount,
                                     decoration: InputDecoration(
-                                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                                      floatingLabelBehavior:
+                                          FloatingLabelBehavior.always,
                                       labelText: 'descuento',
                                       suffixText: '%',
-                                      suffixStyle: const TextStyle(
-                                          color: Colors.black
-                                      ),
+                                      suffixStyle:
+                                          const TextStyle(color: Colors.black),
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                     ),
                                     keyboardType: TextInputType.number,
                                     validator: (value) {
-                                      if (value!.isNotEmpty && double.parse(value) > 100) {
+                                      if (value!.isNotEmpty &&
+                                          double.parse(value) > 100) {
                                         return 'El descuento no puede ser mayor al 100%';
                                       }
                                       return null;
                                     },
                                   ),
                                 ),
-                              ),// descuento
+                              ), // descuento
                               Expanded(
-                                child:  Padding(
+                                child: Padding(
                                   padding: const EdgeInsets.only(
                                       left: 15, right: 15, top: 15),
                                   child: TextFormField(
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
-                                    ],
-                                    controller: offer,
-                                    decoration: InputDecoration(
-                                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                                      labelText: 'Oferta',
-                                      suffixText: '\$',
-                                      suffixStyle: const TextStyle(
-                                          color: Colors.black
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.allow(
+                                            RegExp(r'^\d*\.?\d*')),
+                                      ],
+                                      controller: offer,
+                                      decoration: InputDecoration(
+                                        floatingLabelBehavior:
+                                            FloatingLabelBehavior.always,
+                                        labelText: 'Oferta',
+                                        suffixText: '\$',
+                                        suffixStyle: const TextStyle(
+                                            color: Colors.black),
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
                                       ),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                    ),
-                                    keyboardType: TextInputType.number,
+                                      keyboardType: TextInputType.number,
                                       validator: (value) {
                                         if (value!.isEmpty) {
                                           return null; // No hay error si el valor está vacío
-                                        } else if (double.parse(value) > double.parse(priceUnit.text)) {
+                                        } else if (double.parse(value) >
+                                            double.parse(priceUnit.text)) {
                                           return 'Debes agregar un precio por unidad menor o igual al precio unitario';
                                         }
                                         return null;
-                                      }
-                                  ),
+                                      }),
                                 ),
-                              ),// oferta
+                              ), // oferta
                             ],
                           ),
-                        ),// rebajas
+                        ), // rebajas
                         Padding(
                           padding: const EdgeInsets.all(15),
                           child: TextFormField(
@@ -1243,7 +1579,8 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                             ],
                             controller: promotion,
                             decoration: InputDecoration(
-                              floatingLabelBehavior: FloatingLabelBehavior.always,
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.always,
                               labelText: 'Promocion',
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
@@ -1251,7 +1588,7 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                             ),
                             keyboardType: TextInputType.number,
                           ),
-                        ),// promocion
+                        ), // promocion
                         SizedBox(
                           width: 600,
                           height: 240,
@@ -1259,27 +1596,32 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                             children: [
                               Expanded(
                                 child: Padding(
-                                  padding: const EdgeInsets.only(left: 15, bottom: 15, right: 15),
+                                  padding: const EdgeInsets.only(
+                                      left: 15, bottom: 15, right: 15),
                                   child: Container(
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(8),
                                         border: Border.all(
                                           color: Colors.deepPurple,
                                           width: 1,
-                                        )
-                                    ),
+                                        )),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
-                                        ValueListenableBuilder<List<Map<String, dynamic>>>(
+                                        ValueListenableBuilder<
+                                            List<Map<String, dynamic>>>(
                                           valueListenable:
-                                          Provider.of<ConnectionDatesBlocs>(context).brands,
+                                              Provider.of<ConnectionDatesBlocs>(
+                                                      context)
+                                                  .brands,
                                           builder: (context, value, child) {
-
                                             final brands = value;
 
                                             Widget widget = Padding(
-                                              padding: const EdgeInsets.symmetric(vertical: 10),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 10),
                                               child: Container(
                                                 height: 40,
                                                 width: double.infinity,
@@ -1292,49 +1634,73 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                                   ),
                                                 ),
                                                 child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
                                                   children: [
                                                     const Padding(
-                                                      padding: EdgeInsets.only(left: 8),
-                                                      child: Text('Marcas',
+                                                      padding: EdgeInsets.only(
+                                                          left: 8),
+                                                      child: Text(
+                                                        'Marcas',
                                                         style: TextStyle(
                                                             fontSize: 18,
-                                                            fontWeight: FontWeight.bold
-                                                        ),),
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
                                                     ),
                                                     Padding(
-                                                      padding: const EdgeInsets.only(right: 8),
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              right: 8),
                                                       child: InkWell(
                                                         onTap: () async {
                                                           showDialog(
                                                             context: context,
                                                             builder: (context) {
                                                               return AlertDialog(
-                                                                title:
-                                                                const Text('Crear nueva marca'),
-                                                                content: SizedBox(
+                                                                backgroundColor:
+                                                                    Theme.of(
+                                                                            context)
+                                                                        .colorScheme
+                                                                        .primary,
+                                                                shape:
+                                                                    RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              5), // Aquí puedes cambiar el radio de los bordes
+                                                                ),
+                                                                title: const Text(
+                                                                    'Crear nueva marca'),
+                                                                content:
+                                                                    SizedBox(
                                                                   height: 60,
                                                                   width: 200,
                                                                   child: Form(
-                                                                    key: formKeyInputBrand,
-                                                                    child: TextFormField(
-                                                                      controller: brandInput,
-                                                                      decoration: const InputDecoration(
+                                                                    key:
+                                                                        formKeyInputBrand,
+                                                                    child:
+                                                                        TextFormField(
+                                                                      controller:
+                                                                          brandInput,
+                                                                      decoration:
+                                                                          const InputDecoration(
                                                                         labelText:
-                                                                        'Nombre de la marca',
+                                                                            'Nombre de la marca',
                                                                       ),
                                                                       inputFormatters: [
                                                                         MyCustomFormatter()
                                                                       ],
-                                                                      validator: (value) {
-                                                                        if (value!.isEmpty) {
+                                                                      validator:
+                                                                          (value) {
+                                                                        if (value!
+                                                                            .isEmpty) {
                                                                           return 'Por favor, introduce el nombre de la marca';
-                                                                        } else if (brands.any(
-                                                                                (brand) =>
-                                                                            brand['name']
-                                                                                .toLowerCase() ==
-                                                                                value
-                                                                                    .toLowerCase())) {
+                                                                        } else if (brands.any((brand) =>
+                                                                            brand['name'].toLowerCase() ==
+                                                                            value.toLowerCase())) {
                                                                           return 'Esta marca ya existe';
                                                                         }
                                                                         return null;
@@ -1343,25 +1709,47 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                                                   ),
                                                                 ),
                                                                 actions: [
-                                                                  TextButton(
-                                                                    child: const Text('Cancelar'),
-                                                                    onPressed: () {
-                                                                      Navigator.of(context).pop();
+                                                                  ElevatedButton(
+                                                                    style: ElevatedButton.styleFrom(
+                                                                      backgroundColor:Theme.of(context).hintColor,
+                                                                      shape: RoundedRectangleBorder(
+                                                                        borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(5),
+                                                                      ), ),
+                                                                    child: Text(
+                                                                      'Cancelar',
+                                                                    ),
+                                                                    onPressed:
+                                                                        () {
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
                                                                     },
                                                                   ),
-                                                                  TextButton(
-                                                                    child: const Text('Enviar'),
-                                                                    onPressed: () async {
+                                                                  ElevatedButton(
+                                                                    style: ElevatedButton.styleFrom(
+                                                                      backgroundColor:Theme.of(context).primaryColor,
+                                                                      shape: RoundedRectangleBorder(
+                                                                        borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(5),
+                                                                      ), ),
+                                                                    child: const Text(
+                                                                      'Enviar',
+                                                                    ),
+                                                                    onPressed:
+                                                                        () async {
                                                                       if (formKeyInputBrand
                                                                           .currentState!
                                                                           .validate()) {
                                                                         final response =
-                                                                        await http.post(
+                                                                            await http.post(
                                                                           Uri.parse(
                                                                               'http:$ipPort/created_brand'),
                                                                           body: {
                                                                             'brand':
-                                                                            brandInput.text
+                                                                                brandInput.text
                                                                           },
                                                                         );
                                                                         if (response.statusCode ==
@@ -1372,9 +1760,11 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                                                           print(
                                                                               'Error al crear la marca');
                                                                         }
-                                                                        Navigator.of(context).pop();
+                                                                        Navigator.of(context)
+                                                                            .pop();
                                                                       } else {
-                                                                        brandInput.clear();
+                                                                        brandInput
+                                                                            .clear();
                                                                       }
                                                                     },
                                                                   ),
@@ -1385,10 +1775,14 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                                         },
                                                         child: const Row(
                                                           children: [
-                                                            Text('Agregar marca'),
+                                                            Text(
+                                                                'Agregar marca'),
                                                             Padding(
-                                                              padding: EdgeInsets.only(left: 3),
-                                                              child: Icon(Icons.add_circle_outline),
+                                                              padding: EdgeInsets
+                                                                  .only(
+                                                                      left: 3),
+                                                              child: Icon(Icons
+                                                                  .add_circle_outline),
                                                             ),
                                                           ],
                                                         ),
@@ -1399,12 +1793,13 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                               ),
                                             );
 
-                                            if(value.isEmpty) {
+                                            if (value.isEmpty) {
                                               return Column(
                                                 children: [
                                                   widget,
                                                   const Center(
-                                                    child: Text('No hay marcas disponibles'),
+                                                    child: Text(
+                                                        'No hay marcas disponibles'),
                                                   ),
                                                 ],
                                               );
@@ -1413,23 +1808,41 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                                 children: [
                                                   widget,
                                                   Align(
-                                                    alignment: Alignment.centerLeft,
+                                                    alignment:
+                                                        Alignment.centerLeft,
                                                     child: Padding(
-                                                      padding: const EdgeInsets.only(left: 10, bottom: 5),
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 10,
+                                                              bottom: 5),
                                                       child: InkWell(
                                                           onTap: () {
                                                             setState(() {
-                                                              brandSelect = null;
+                                                              brandSelect =
+                                                                  null;
                                                             });
                                                           },
                                                           child: Container(
                                                             decoration: BoxDecoration(
-                                                                color: Theme.of(context).primaryColor.withOpacity(0.05),
-                                                                borderRadius: BorderRadius.circular(3)
-                                                            ),
-                                                            child: const Padding(
-                                                              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-                                                              child: Text('Ninguno'),
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .primaryColor
+                                                                    .withOpacity(
+                                                                        0.05),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            3)),
+                                                            child:
+                                                                const Padding(
+                                                              padding: EdgeInsets
+                                                                  .symmetric(
+                                                                      vertical:
+                                                                          5,
+                                                                      horizontal:
+                                                                          15),
+                                                              child: Text(
+                                                                  'Ninguno'),
                                                             ),
                                                           )),
                                                     ),
@@ -1438,115 +1851,155 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                                     height: 110,
                                                     child: ListView.builder(
                                                       itemCount: brands.length,
-                                                      itemBuilder: ( context, int index) {
-
-
+                                                      itemBuilder:
+                                                          (context, int index) {
                                                         return Padding(
-                                                          padding: const EdgeInsets.only(bottom: 5),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  bottom: 5),
                                                           child: Row(
-                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
                                                             children: [
                                                               Padding(
-                                                                padding: const EdgeInsets.only(left: 10),
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .only(
+                                                                        left:
+                                                                            10),
                                                                 child: InkWell(
                                                                     onTap: () {
-                                                                      setState(() {
-                                                                        brandSelect = brands[index]['id_brand'];
-                                                                        brandName = brands[index]['name'];
+                                                                      setState(
+                                                                          () {
+                                                                        brandSelect =
+                                                                            brands[index]['id_brand'];
+                                                                        brandName =
+                                                                            brands[index]['name'];
                                                                       });
                                                                     },
-                                                                    child: Container(
+                                                                    child:
+                                                                        Container(
                                                                       decoration: BoxDecoration(
-                                                                    color: Theme.of(context).primaryColor.withOpacity(0.05),
-                                                                        borderRadius: BorderRadius.circular(3)
-                                                                      ),
-                                                                      child: Padding(
-                                                                        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-                                                                        child: Row(
+                                                                          color: Theme.of(context).primaryColor.withOpacity(
+                                                                              0.05),
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(3)),
+                                                                      child:
+                                                                          Padding(
+                                                                        padding: const EdgeInsets
+                                                                            .symmetric(
+                                                                            vertical:
+                                                                                5,
+                                                                            horizontal:
+                                                                                15),
+                                                                        child:
+                                                                            Row(
                                                                           children: [
                                                                             Text(brands[index]['name'].toString()),
-                                                                            brandSelect == brands[index]['id_brand'] ? const Padding(
-                                                                              padding: EdgeInsets.only(left: 5),
-                                                                              child: Icon(Icons.check_circle, color: Colors.green, size: 18,),
-                                                                            ) : const SizedBox(),
+                                                                            brandSelect == brands[index]['id_brand']
+                                                                                ? const Padding(
+                                                                                    padding: EdgeInsets.only(left: 5),
+                                                                                    child: Icon(
+                                                                                      Icons.check_circle,
+                                                                                      color: Colors.green,
+                                                                                      size: 18,
+                                                                                    ),
+                                                                                  )
+                                                                                : const SizedBox(),
                                                                           ],
                                                                         ),
                                                                       ),
                                                                     )),
                                                               ),
                                                               Padding(
-                                                                padding: const EdgeInsets.only(right: 10),
-                                                                child: IconButton(
-                                                                  icon: const Icon(Icons.delete, size: 18,),
-                                                                  onPressed: () {
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .only(
+                                                                        right:
+                                                                            10),
+                                                                child:
+                                                                    IconButton(
+                                                                  icon:
+                                                                      const Icon(
+                                                                    Icons
+                                                                        .delete,
+                                                                    size: 18,
+                                                                  ),
+                                                                  onPressed:
+                                                                      () {
                                                                     showDialog(
-                                                                      context: context,
-                                                                      builder: (BuildContext context) {
+                                                                      context:
+                                                                          context,
+                                                                      builder:
+                                                                          (BuildContext
+                                                                              context) {
                                                                         return AlertDialog(
-                                                                          shape: const RoundedRectangleBorder(
-                                                                              borderRadius: BorderRadius.all(
-                                                                                  Radius.circular(5))),
-                                                                          title: const Text(
-                                                                              '¿Seguro que quieres eliminar esta marca?'),
-                                                                          content: Row(
+                                                                          backgroundColor: Theme.of(context)
+                                                                              .colorScheme
+                                                                              .primary,
+                                                                          shape:
+                                                                              RoundedRectangleBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(5), // Aquí puedes cambiar el radio de los bordes
+                                                                          ),
+                                                                          title:
+                                                                              const Text('¿Seguro que quieres eliminar esta marca?'),
+                                                                          content:
+                                                                              Row(
                                                                             mainAxisAlignment:
-                                                                            MainAxisAlignment.spaceAround,
+                                                                                MainAxisAlignment.spaceAround,
                                                                             children: [
                                                                               ElevatedButton(
-                                                                                style:
-                                                                                ElevatedButton.styleFrom(
-                                                                                    backgroundColor:
-                                                                                    Colors.blue),
+                                                                                style: ElevatedButton.styleFrom(
+                                                                                  backgroundColor:Theme.of(context).primaryColor,
+                                                                                  shape: RoundedRectangleBorder(
+                                                                                    borderRadius:
+                                                                                    BorderRadius
+                                                                                        .circular(5),
+                                                                                  ), ),
                                                                                 child: const Text(
                                                                                   'Sí',
-                                                                                  style: TextStyle(
-                                                                                      color: Colors.white),
+                                                                                  style: TextStyle(color: Colors.white),
                                                                                 ),
                                                                                 onPressed: () async {
-                                                                                  final response =
-                                                                                  await http.post(
-                                                                                    Uri.parse(
-                                                                                        'http:$ipPort/delete_brand'),
+                                                                                  final response = await http.post(
+                                                                                    Uri.parse('http:$ipPort/delete_brand'),
                                                                                     body: {
                                                                                       'id_brand': brands[index]['id_brand'].toString()
                                                                                     },
                                                                                   );
 
-                                                                                  if (response.statusCode ==
-                                                                                      200) {
+                                                                                  if (response.statusCode == 200) {
                                                                                     Navigator.pop(context);
                                                                                   } else {
                                                                                     Navigator.pop(context);
                                                                                     showDialog(
                                                                                       context: context,
-                                                                                      builder: (BuildContext
-                                                                                      context) {
+                                                                                      builder: (BuildContext context) {
                                                                                         return AlertDialog(
-                                                                                          shape: const RoundedRectangleBorder(
-                                                                                              borderRadius: BorderRadius
-                                                                                                  .all(Radius
-                                                                                                  .circular(
-                                                                                                  5))),
-                                                                                          title: const Text(
-                                                                                              'Error al eliminar marca'),
+                                                                                          backgroundColor: Theme.of(context).colorScheme.primary,
+                                                                                          shape: RoundedRectangleBorder(
+                                                                                            borderRadius: BorderRadius.circular(5), // Aquí puedes cambiar el radio de los bordes
+                                                                                          ),
+                                                                                          title: const Text('Error al eliminar marca'),
                                                                                           content: SizedBox(
                                                                                             width: 60,
-                                                                                            child:
-                                                                                            ElevatedButton(
-                                                                                              style: ElevatedButton
-                                                                                                  .styleFrom(
-                                                                                                  backgroundColor:
-                                                                                                  Colors.blue),
-                                                                                              child:
-                                                                                              const Text(
+                                                                                            child:  ElevatedButton(
+                                                                                              style: ElevatedButton.styleFrom(
+                                                                                                  backgroundColor:Theme.of(context).primaryColor,
+                                                                                              shape: RoundedRectangleBorder(
+                                                                                                borderRadius:
+                                                                                                BorderRadius
+                                                                                                    .circular(5),
+                                                                                              ), ),
+                                                                                              child: const Text(
                                                                                                 'ok',
-                                                                                                style: TextStyle(
-                                                                                                    color: Colors
-                                                                                                        .white),
+                                                                                                style: TextStyle(color: Colors.white),
                                                                                               ),
                                                                                               onPressed: () {
-                                                                                                Navigator.pop(
-                                                                                                    context);
+                                                                                                Navigator.pop(context);
                                                                                               },
                                                                                             ),
                                                                                           ),
@@ -1557,14 +2010,10 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                                                                 },
                                                                               ),
                                                                               ElevatedButton(
-                                                                                style:
-                                                                                ElevatedButton.styleFrom(
-                                                                                    backgroundColor:
-                                                                                    Colors.black),
+                                                                                style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
                                                                                 child: const Text(
                                                                                   'No',
-                                                                                  style: TextStyle(
-                                                                                      color: Colors.white),
+                                                                                  style: TextStyle(color: Colors.white),
                                                                                 ),
                                                                                 onPressed: () {
                                                                                   Navigator.of(context).pop();
@@ -1581,9 +2030,7 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                                             ],
                                                           ),
                                                         );
-
                                                       },
-
                                                     ),
                                                   ),
                                                 ],
@@ -1595,7 +2042,7 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                     ),
                                   ),
                                 ),
-                              ),// marca
+                              ), // marca
                               Expanded(
                                 child: Column(
                                   children: [
@@ -1608,10 +2055,12 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                         ],
                                         controller: supplier,
                                         decoration: InputDecoration(
-                                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                                          floatingLabelBehavior:
+                                              FloatingLabelBehavior.always,
                                           labelText: 'Proveedor',
                                           border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(8),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
                                           ),
                                         ),
                                         validator: (value) {
@@ -1621,28 +2070,30 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                           return null;
                                         },
                                       ),
-                                    ),// proveedor
+                                    ), // proveedor
                                     Padding(
-                                      padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
+                                      padding: const EdgeInsets.only(
+                                          left: 15, right: 15, top: 15),
                                       child: TextFormField(
                                         inputFormatters: [
-                                          FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
+                                          FilteringTextInputFormatter.allow(
+                                              RegExp(r'^\d*\.?\d*')),
                                         ],
                                         controller: iva,
                                         decoration: InputDecoration(
-                                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                                            floatingLabelBehavior:
+                                                FloatingLabelBehavior.always,
                                             labelText: 'Iva',
                                             border: OutlineInputBorder(
-                                              borderRadius: BorderRadius.circular(8),
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
                                             ),
                                             suffixText: '%',
                                             suffixStyle: const TextStyle(
-                                                color: Colors.black
-                                            )
-                                        ),
+                                                color: Colors.black)),
                                         keyboardType: TextInputType.number,
                                       ),
-                                    ),// iva
+                                    ), // iva
                                   ],
                                 ),
                               ),
@@ -1652,72 +2103,123 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                         Padding(
                           padding: const EdgeInsets.only(top: 15, bottom: 10),
                           child: ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.black),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Theme.of(context).primaryColor,
+                              shadowColor:
+                                  Theme.of(context).colorScheme.onSurface,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5)),
                             ),
                             onPressed: _isLoading
                                 ? null
                                 : () async {
+                                    if (_isLoading == false) {
+                                      setState(() {
+                                        _isLoading = true;
+                                      });
 
-                                    if(_isLoading == false) {
-
-                                    setState(() {
-                                      _isLoading = true;
-                                    });
-
-                                      if(mdcp.isNotEmpty && mdcp[0]['colors'][0]['photos'].isNotEmpty) {
-
+                                      if (mdcp.isNotEmpty &&
+                                          mdcp[0]['colors'][0]['photos']
+                                              .isNotEmpty) {
                                         if (formKey.currentState!.validate()) {
                                           // elimina datos no deseados o vacios
 
                                           // Itera sobre mdcp de atrás hacia adelante
-                                          for (int modelIndex = mdcp.length - 1; modelIndex >= 0; modelIndex--) {
+                                          for (int modelIndex = mdcp.length - 1;
+                                              modelIndex >= 0;
+                                              modelIndex--) {
                                             // Itera sobre los colores de atrás hacia adelante
-                                            for (int colorIndex = mdcp[modelIndex]['colors'].length - 1; colorIndex >= 0; colorIndex--) {
+                                            for (int colorIndex =
+                                                    mdcp[modelIndex]['colors']
+                                                            .length -
+                                                        1;
+                                                colorIndex >= 0;
+                                                colorIndex--) {
                                               // Si no hay fotos, elimina el índice de colors
-                                              if (mdcp[modelIndex]['colors'][colorIndex]['photos'].isEmpty) {
-                                                mdcp[modelIndex]['colors'].removeAt(colorIndex);
+                                              if (mdcp[modelIndex]['colors']
+                                                      [colorIndex]['photos']
+                                                  .isEmpty) {
+                                                mdcp[modelIndex]['colors']
+                                                    .removeAt(colorIndex);
                                               }
                                             }
                                             // Si no hay colores, elimina el índice de mdcp
-                                            if (mdcp[modelIndex]['colors'].isEmpty) {
+                                            if (mdcp[modelIndex]['colors']
+                                                .isEmpty) {
                                               mdcp.removeAt(modelIndex);
                                             }
                                           }
 
                                           String routeOne = '';
 
-                                          for(int modelIndex = 0; modelIndex < mdcp.length; modelIndex++) {
-
+                                          for (int modelIndex = 0;
+                                              modelIndex < mdcp.length;
+                                              modelIndex++) {
                                             // Agrega los valores de las dimensiones
-                                            mdcp[modelIndex]['dimensions']['height'] = height[modelIndex].text;
-                                            mdcp[modelIndex]['dimensions']['width'] = width[modelIndex].text;
-                                            mdcp[modelIndex]['dimensions']['depth'] = depth[modelIndex].text;
-                                            mdcp[modelIndex]['dimensions']['weight'] = weight[modelIndex].text;
+                                            mdcp[modelIndex]['dimensions']
+                                                    ['height'] =
+                                                height[modelIndex].text;
+                                            mdcp[modelIndex]['dimensions']
+                                                    ['width'] =
+                                                width[modelIndex].text;
+                                            mdcp[modelIndex]['dimensions']
+                                                    ['depth'] =
+                                                depth[modelIndex].text;
+                                            mdcp[modelIndex]['dimensions']
+                                                    ['weight'] =
+                                                weight[modelIndex].text;
 
                                             // Itera sobre los colores
-                                            for (int colorIndex = 0; colorIndex < mdcp[modelIndex]['colors'].length; colorIndex++) {
-                                              List<Map<String, dynamic>> fotosUrls = [];
+                                            for (int colorIndex = 0;
+                                                colorIndex <
+                                                    mdcp[modelIndex]['colors']
+                                                        .length;
+                                                colorIndex++) {
+                                              List<Map<String, dynamic>>
+                                                  fotosUrls = [];
 
                                               // Itera sobre las fotos
-                                              for (int photoIndex = 0; photoIndex < mdcp[modelIndex]['colors'][colorIndex]['photos'].length; photoIndex++) {
-                                                final bytes = mdcp[modelIndex]['colors'][colorIndex]['photos'][photoIndex]['bytes'];
-                                                final fileName = mdcp[modelIndex]['colors'][colorIndex]['photos'][photoIndex]['name'];
+                                              for (int photoIndex = 0;
+                                                  photoIndex <
+                                                      mdcp[modelIndex]['colors']
+                                                                  [colorIndex]
+                                                              ['photos']
+                                                          .length;
+                                                  photoIndex++) {
+                                                final bytes = mdcp[modelIndex]
+                                                            ['colors']
+                                                        [colorIndex]['photos']
+                                                    [photoIndex]['bytes'];
+                                                final fileName =
+                                                    mdcp[modelIndex]['colors']
+                                                                [colorIndex]
+                                                            ['photos']
+                                                        [photoIndex]['name'];
 
                                                 // subir las foto a Firebase y obtener la URL de descarga
-                                                String route = 'productos/categorias';
+                                                String route =
+                                                    'productos/categorias';
                                                 for (int? id in stack) {
                                                   if (id != null) {
-                                                    route += '/${searchNameforId(id, value)}';
+                                                    route +=
+                                                        '/${searchNameforId(id, value)}';
                                                   }
                                                 }
-                                                routeOne = '$route/${name.text}';
-                                                route += '/${name.text}/$fileName';
-                                                final storageRef = FirebaseStorage.instance.ref().child(route);
-                                                final uploadTask = storageRef.putData(bytes);
-                                                await uploadTask.whenComplete(() {});
-                                                final downloadUrl = await storageRef.getDownloadURL();
+                                                routeOne =
+                                                    '$route/${name.text}';
+                                                route +=
+                                                    '/${name.text}/$fileName';
+                                                final storageRef =
+                                                    FirebaseStorage.instance
+                                                        .ref()
+                                                        .child(route);
+                                                final uploadTask =
+                                                    storageRef.putData(bytes);
+                                                await uploadTask
+                                                    .whenComplete(() {});
+                                                final downloadUrl =
+                                                    await storageRef
+                                                        .getDownloadURL();
 
                                                 fotosUrls.add({
                                                   'url': downloadUrl,
@@ -1725,33 +2227,43 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                                 });
                                               }
 
-                                              mdcp[modelIndex]['colors'][colorIndex]['photos'] = fotosUrls;
+                                              mdcp[modelIndex]['colors']
+                                                      [colorIndex]['photos'] =
+                                                  fotosUrls;
                                             }
                                           }
-
 
                                           var url = Uri.parse(
                                               'http:$ipPort/created_product');
 
-
                                           var headers = {
                                             'Content-Type':
-                                            'application/json; charset=UTF-8'
+                                                'application/json; charset=UTF-8'
                                           };
 
                                           var body = jsonEncode({
                                             'name': name.text,
                                             'description': description.text,
                                             'price_unit': priceUnit.text,
-                                            'price_wholesale':  priceWholesale.text.isEmpty ? null : priceWholesale.text,
+                                            'price_wholesale':
+                                                priceWholesale.text.isEmpty
+                                                    ? null
+                                                    : priceWholesale.text,
                                             'price_cost': priceCost.text,
-                                            'promotion': promotion.text.isEmpty ? null : promotion.text ,
-                                            'discount': discount.text.isEmpty ? null : discount.text,
-                                            'offer': offer.text.isEmpty ? null : offer.text,
+                                            'promotion': promotion.text.isEmpty
+                                                ? null
+                                                : promotion.text,
+                                            'discount': discount.text.isEmpty
+                                                ? null
+                                                : discount.text,
+                                            'offer': offer.text.isEmpty
+                                                ? null
+                                                : offer.text,
                                             'quantity': quantity.text,
                                             'supplier': supplier.text,
                                             'brand': brandName,
-                                            'id_category_product': categorySelect['id_category'],
+                                            'id_category_product':
+                                                categorySelect['id_category'],
                                             //'time_acquisition':  timeAcquisition.text,
                                             'iva': iva.text,
                                             'mdcp': mdcp,
@@ -1787,8 +2299,8 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                               _isLoading = false;
                                             });
                                             Navigator.of(context).pop();
-                                          }
-                                          else if (response.statusCode == 500) {
+                                          } else if (response.statusCode ==
+                                              500) {
                                             mdcp.clear();
                                             routeOne = '';
 
@@ -1799,37 +2311,42 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                               context: context,
                                               builder: (BuildContext context) {
                                                 return AlertDialog(
+                                                  backgroundColor:
+                                                      Theme.of(context)
+                                                          .colorScheme
+                                                          .primary,
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius:
-                                                    BorderRadius.circular(10),
+                                                        BorderRadius.circular(
+                                                            5), // Aquí puedes cambiar el radio de los bordes
                                                   ),
                                                   title: const Center(
                                                       child: Column(
-                                                        children: [
-                                                          Text('Error al crear producto'),
-                                                        ],
-                                                      )),
+                                                    children: [
+                                                      Text(
+                                                          'Error al crear producto'),
+                                                    ],
+                                                  )),
                                                   actions: [
                                                     ElevatedButton(
-                                                      style: TextButton.styleFrom(
-                                                        foregroundColor:
-                                                        Colors.blue,
+                                                      style: ElevatedButton
+                                                          .styleFrom(
                                                         backgroundColor:
-                                                        Colors.blue[100],
+                                                            Theme.of(context)
+                                                                .primaryColor,
                                                         shape:
-                                                        RoundedRectangleBorder(
+                                                            RoundedRectangleBorder(
                                                           borderRadius:
-                                                          BorderRadius.circular(
-                                                              5),
+                                                              BorderRadius
+                                                                  .circular(5),
                                                         ),
                                                       ),
                                                       onPressed: () {
-                                                        Navigator.of(context).pop();
+                                                        Navigator.of(context)
+                                                            .pop();
                                                       },
                                                       child: const Text(
                                                         'Cerrar',
-                                                        style: TextStyle(
-                                                            color: Colors.white),
                                                       ),
                                                     ),
                                                   ],
@@ -1837,34 +2354,39 @@ class NewProductDesktopState extends State<NewProductDesktop> {
                                               },
                                             );
                                           }
-                                        }
-                                        else {
+                                        } else {
                                           setState(() {
                                             _isLoading = false;
                                           });
-                                          snackBarMessaging.showOverlay(context,'Todos los campos son obligatorios', Colors.red);
+                                          snackBarMessaging.showOverlay(
+                                              context,
+                                              'Todos los campos son obligatorios',
+                                              Colors.red);
                                         }
-                                      }
-                                      else {
-                                        snackBarMessaging.showOverlay(context, 'Debe haber al menos una foto', Colors.red);
+                                      } else {
+                                        snackBarMessaging.showOverlay(
+                                            context,
+                                            'Debe haber al menos una foto',
+                                            Colors.red);
                                         setState(() {
                                           _isLoading = false;
                                         });
                                       }
+                                    } else {
+                                      snackBarMessaging.showOverlay(
+                                          context,
+                                          'Espera a que termine el proceso',
+                                          Colors.red);
                                     }
-                                    else {
-                                      snackBarMessaging.showOverlay(context, 'Espera a que termine el proceso', Colors.red);
-                                    }
-
                                   },
                             child: _isLoading
                                 ? const SizedBox(
-                                height: 15,
-                                width: 15,
-                                child: CircularProgressIndicator())
-                                : const Text('Crear'),
+                                    height: 15,
+                                    width: 15,
+                                    child: CircularProgressIndicator())
+                                : const Text('Crear producto'),
                           ),
-                        ),// boton
+                        ), // boton
                       ],
                     ),
                   ),
@@ -1875,4 +2397,3 @@ class NewProductDesktopState extends State<NewProductDesktop> {
     );
   }
 }
-

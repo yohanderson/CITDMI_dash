@@ -89,7 +89,7 @@ class _OrderDesktopState extends State<OrderDesktop> {
               ),
               Expanded(
                 child: Container(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.onSurface
                 ),
               ),
             ],
@@ -130,7 +130,6 @@ class _OrderDesktopState extends State<OrderDesktop> {
                   const Text('Orden',
                   style: TextStyle(
                     fontSize: 40,
-                    color: Colors.white,
                   ),),
                   Padding(
                     padding: const EdgeInsets.only(top: 25, right: 25, left: 25),

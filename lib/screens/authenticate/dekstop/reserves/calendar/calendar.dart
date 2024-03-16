@@ -126,9 +126,9 @@ class _CalendarState extends State<Calendar> {
             headerStyle: HeaderStyle(
               formatButtonVisible: false,
               titleCentered: true,
-              titleTextStyle: TextStyle(color: Theme.of(context).primaryColor, fontSize: 25, fontWeight: FontWeight.w500),
-              leftChevronIcon: Icon(Icons.arrow_back_ios, color: Theme.of(context).primaryColor, size: 25),
-              rightChevronIcon: Icon(Icons.arrow_forward_ios, color: Theme.of(context).primaryColor, size: 25),
+              titleTextStyle: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color, fontSize: 25, fontWeight: FontWeight.w500),
+              leftChevronIcon: const Icon(Icons.arrow_back_ios, size: 25),
+              rightChevronIcon: const Icon(Icons.arrow_forward_ios, size: 25),
             ),
           ),
         );

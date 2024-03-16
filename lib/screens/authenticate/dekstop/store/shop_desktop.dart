@@ -40,15 +40,15 @@ class _ShopDesktopViewState extends State<ShopDesktopView> {
   void updateCategorieSelected(int? newCategory, bool newState) {
     setState(() {
       categorySelected = newCategory;
-      menuCategories = newState;
       selectedCategoriesMenu = [null];
+      menuCategories = newState;
     });
   }
 
   void selectedAllMenu() {
     setState(() {
-      menuCategories = false;
       categorySelected = null;
+      menuCategories = false;
     });
   }
 
@@ -86,7 +86,7 @@ class _ShopDesktopViewState extends State<ShopDesktopView> {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
             spreadRadius: 0.2,
             blurRadius: 20,
             offset: const Offset(10, 8),
@@ -101,10 +101,9 @@ class _ShopDesktopViewState extends State<ShopDesktopView> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Prodcutos',
+                const Text(
+                  'Productos',
                   style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyLarge?.color,
                       fontWeight: FontWeight.bold,
                       fontSize: 18),
                 ),
@@ -117,8 +116,13 @@ class _ShopDesktopViewState extends State<ShopDesktopView> {
                         onTap: () {
                           showDialog(
                               context: context,
-                              builder: (context) => const AlertDialog(
-                                    content: NewProductDesktop(),
+                              builder: (context) => AlertDialog(
+                                backgroundColor: Theme.of(context).colorScheme.primary,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      10),
+                                ),
+                                    content: const NewProductDesktop(),
                                   ));
                         },
                         child: Container(
@@ -126,7 +130,14 @@ class _ShopDesktopViewState extends State<ShopDesktopView> {
                           width: 150,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
-                            color: Theme.of(context).hintColor.withOpacity(0.8),
+                            gradient:  LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                Theme.of(context).colorScheme.onPrimary,
+                                Theme.of(context).hintColor
+                              ],
+                            ),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -135,20 +146,15 @@ class _ShopDesktopViewState extends State<ShopDesktopView> {
                                 Icons.add_box_outlined,
                                 color: Theme.of(context)
                                     .textTheme
-                                    .bodyLarge
+                                    .bodyMedium
                                     ?.color,
                                 size: 20,
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 5),
+                              const Padding(
+                                padding: EdgeInsets.only(right: 5),
                                 child: Text(
                                   'Agregar producto',
-                                  style: TextStyle(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge
-                                        ?.color,
-                                  ),
+
                                 ),
                               ),
                             ],
@@ -170,11 +176,18 @@ class _ShopDesktopViewState extends State<ShopDesktopView> {
                           width: 30,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
-                            color: Theme.of(context).hintColor.withOpacity(0.8),
+                            gradient:  LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                Theme.of(context).hintColor,
+                                Theme.of(context).colorScheme.onPrimary
+                              ],
+                            ),
                           ),
                           child: Icon(
                             Icons.more_vert,
-                            color: Theme.of(context).textTheme.bodyLarge?.color,
+                            color: Theme.of(context).textTheme.bodyMedium?.color,
                             size: 20,
                           ),
                         ),
@@ -207,7 +220,7 @@ class _ShopDesktopViewState extends State<ShopDesktopView> {
                         Column(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 20),
+                              padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 5),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
@@ -223,7 +236,7 @@ class _ShopDesktopViewState extends State<ShopDesktopView> {
                                         style: TextStyle(
                                             color: Theme.of(context)
                                                 .textTheme
-                                                .bodyMedium
+                                                .bodyLarge
                                                 ?.color,
                                             fontWeight: FontWeight.bold,
                                             fontSize: 18),
@@ -258,7 +271,7 @@ class _ShopDesktopViewState extends State<ShopDesktopView> {
                                         itemCount: products.length,
                                         itemBuilder: (context, index) {
                                           final product = products[index];
-                                          if (categorySelected == null || product['id_category_producto'] == categorySelected) {
+                                          if (categorySelected == null || product['id_category_product'] == categorySelected) {
                                             return Padding(
                                               padding: const EdgeInsets.symmetric(
                                                   horizontal: 20),
@@ -288,11 +301,7 @@ class _ShopDesktopViewState extends State<ShopDesktopView> {
                                                     width: 100,
                                                     child: Text(
                                                       product['name'],
-                                                      style: TextStyle(
-                                                          color: Theme.of(context)
-                                                              .textTheme
-                                                              .bodyLarge
-                                                              ?.color,
+                                                      style: const TextStyle(
                                                           fontWeight:
                                                           FontWeight.bold),
                                                       maxLines: 1,
@@ -309,11 +318,7 @@ class _ShopDesktopViewState extends State<ShopDesktopView> {
                                                               product[
                                                               'id_category_product'])[
                                                       'name'],
-                                                      style: TextStyle(
-                                                          color: Theme.of(context)
-                                                              .textTheme
-                                                              .bodyLarge
-                                                              ?.color,
+                                                      style: const TextStyle(
                                                           fontWeight:
                                                           FontWeight.bold),
                                                     ),
@@ -326,11 +331,7 @@ class _ShopDesktopViewState extends State<ShopDesktopView> {
                                                           decimalDigits: 0)
                                                           .format(
                                                           product['price_unit']),
-                                                      style: TextStyle(
-                                                          color: Theme.of(context)
-                                                              .textTheme
-                                                              .bodyLarge
-                                                              ?.color,
+                                                      style: const TextStyle(
                                                           fontWeight:
                                                           FontWeight.bold),
                                                     ),
@@ -339,11 +340,7 @@ class _ShopDesktopViewState extends State<ShopDesktopView> {
                                                     width: 100,
                                                     child: Text(
                                                       product['quantity'].toString(),
-                                                      style: TextStyle(
-                                                          color: Theme.of(context)
-                                                              .textTheme
-                                                              .bodyLarge
-                                                              ?.color,
+                                                      style: const TextStyle(
                                                           fontWeight:
                                                           FontWeight.bold),
                                                     ),
@@ -362,6 +359,11 @@ class _ShopDesktopViewState extends State<ShopDesktopView> {
                                                             showDialog(
                                                                 context: context,
                                                                 builder: (context) => AlertDialog(
+                                                                  backgroundColor: Theme.of(context).colorScheme.primary,
+                                                                  shape: RoundedRectangleBorder(
+                                                                    borderRadius: BorderRadius.circular(
+                                                                        10),
+                                                                  ),
                                                                   content: EditProductDesktop(product: product),
                                                                 ));
                                                           },
@@ -373,17 +375,12 @@ class _ShopDesktopViewState extends State<ShopDesktopView> {
                                                               borderRadius:
                                                               BorderRadius
                                                                   .circular(8),
-                                                              gradient:
-                                                              LinearGradient(
-                                                                begin: Alignment
-                                                                    .topLeft,
-                                                                end: Alignment
-                                                                    .bottomRight,
+                                                              gradient:  LinearGradient(
+                                                                begin: Alignment.topLeft,
+                                                                end: Alignment.bottomRight,
                                                                 colors: [
-                                                                  Theme.of(context)
-                                                                      .primaryColor,
-                                                                  Theme.of(context)
-                                                                      .hintColor,
+                                                                  Theme.of(context).hintColor,
+                                                                  Theme.of(context).colorScheme.onPrimary
                                                                 ],
                                                               ),
                                                             ),
@@ -392,7 +389,7 @@ class _ShopDesktopViewState extends State<ShopDesktopView> {
                                                               color:
                                                               Theme.of(context)
                                                                   .textTheme
-                                                                  .bodyLarge
+                                                                  .bodyMedium
                                                                   ?.color,
                                                             ),
                                                           ),
@@ -405,6 +402,11 @@ class _ShopDesktopViewState extends State<ShopDesktopView> {
                                                             showDialog(
                                                                 context: context,
                                                                 builder: (context) => AlertDialog(
+                                                                  backgroundColor: Theme.of(context).colorScheme.primary,
+                                                                  shape: RoundedRectangleBorder(
+                                                                    borderRadius: BorderRadius.circular(
+                                                                       10),
+                                                                  ),
                                                                   content: ProductDesktop(product: product),
                                                                 ));
                                                           },
@@ -416,17 +418,12 @@ class _ShopDesktopViewState extends State<ShopDesktopView> {
                                                               borderRadius:
                                                               BorderRadius
                                                                   .circular(8),
-                                                              gradient:
-                                                              LinearGradient(
-                                                                begin: Alignment
-                                                                    .topLeft,
-                                                                end: Alignment
-                                                                    .bottomRight,
+                                                              gradient:  LinearGradient(
+                                                                begin: Alignment.topCenter,
+                                                                end: Alignment.bottomLeft,
                                                                 colors: [
-                                                                  Theme.of(context)
-                                                                      .primaryColor,
-                                                                  Theme.of(context)
-                                                                      .hintColor,
+                                                                  Theme.of(context).colorScheme.onPrimary,
+                                                                  Theme.of(context).hintColor
                                                                 ],
                                                               ),
                                                             ),
@@ -435,7 +432,7 @@ class _ShopDesktopViewState extends State<ShopDesktopView> {
                                                               color:
                                                               Theme.of(context)
                                                                   .textTheme
-                                                                  .bodyLarge
+                                                                  .bodyMedium
                                                                   ?.color,
                                                             ),
                                                           ),
@@ -466,10 +463,10 @@ class _ShopDesktopViewState extends State<ShopDesktopView> {
                           height: 345,
                           width: 750,
                           decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: Theme.of(context).colorScheme.primary,
                               borderRadius: BorderRadius.circular(15),
                               border: Border.all(
-                                  color: Colors.grey
+                                  color: Theme.of(context).primaryColor
                               )
                           ),
                           child: categories.isEmpty
@@ -483,7 +480,7 @@ class _ShopDesktopViewState extends State<ShopDesktopView> {
                               final selectedCategory =
                               selectedCategoriesMenu[index];
                               return MenuCategories(
-                                idPadre: selectedCategory,
+                                idFather: selectedCategory,
                                 categories: categories
                                     .where((category) =>
                                 category['id_padre'] ==

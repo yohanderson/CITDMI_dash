@@ -255,7 +255,6 @@ class LinealChartDesktopState extends State<LinealChartDesktop> {
                                 child: Padding(
                   padding: const EdgeInsets.only(top: 1.5, bottom: 1.5, left: 10,right: 10),
                   child: Text(DateFormat('MMM d', 'es_ES').format(date), style: TextStyle(
-                    fontWeight: FontWeight.w600,
                     fontSize: 13,
                     color: Theme.of(context).textTheme.bodyLarge?.color,
                   ) ,
@@ -449,9 +448,9 @@ class LinealChartDesktopState extends State<LinealChartDesktop> {
                           ),
                           ValueListenableBuilder<DateTime>(
                             valueListenable: focusDate,
-                            builder: (context, fecha, child) {
+                            builder: (context, date, child) {
                               return Text(
-                                DateFormat('MMMM yyyy', 'es_ES').format(fecha),
+                                DateFormat('MMMM yyyy', 'es_ES').format(date),
                                 style: TextStyle(
                                   fontSize: 24,
                                   color: Theme.of(context).textTheme.bodyLarge?.color,

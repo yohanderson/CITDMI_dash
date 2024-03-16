@@ -621,7 +621,12 @@ class CircleChartDesktopState extends State<CircleChartDesktop> {
                                 height: 25,
                                 width: 27,
                                 decoration: BoxDecoration(
-                                    color: Theme.of(context).hintColor,
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        Theme.of(context).hintColor,
+                                        Theme.of(context).colorScheme.secondary.withOpacity(0.2)
+                                      ]
+                                    ),
                                     borderRadius: BorderRadius.circular(4)
                                 ),
                                 child: Center(

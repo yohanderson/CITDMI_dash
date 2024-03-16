@@ -141,7 +141,7 @@ class _OrdersDesktopState extends State<OrdersDesktop> {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
             spreadRadius: 0.2,
             blurRadius:20,
             offset: const Offset(10, 8),
@@ -153,7 +153,7 @@ class _OrdersDesktopState extends State<OrdersDesktop> {
           builder: (context, value, child) {
             final orders = value;
 
-            Widget _CalendarMenu() {
+            Widget calendarMenu() {
               return TableCalendar(
                 firstDay: DateTime.utc(2010, 10, 16),
                 lastDay: DateTime.utc(2030, 3, 14),
@@ -218,7 +218,8 @@ class _OrdersDesktopState extends State<OrdersDesktop> {
             }).toList();
 
             if (filteredOrders.isEmpty) {
-              return Center(child: Column(
+              return Center(
+                  child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -228,8 +229,7 @@ class _OrdersDesktopState extends State<OrdersDesktop> {
                   const Text(
                     'Ordenes',
                     style: TextStyle(
-                        fontSize: 35,
-                        color: Colors.white,
+                        fontSize: 30,
                         fontWeight: FontWeight.bold),
                   ),
                   const Spacer(),
@@ -248,103 +248,85 @@ class _OrdersDesktopState extends State<OrdersDesktop> {
               children: [
                 Column(
                   children: [
-                    Container(
-                      height: 150,
-                      decoration: const BoxDecoration(
-                          color: Colors.black87,
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(20),
-                            bottomRight: Radius.circular(20),
-                          )),
-                    ),
-                    Expanded(
-                      child: Container(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
                     const SizedBox(
                       height: 20,
                     ),
                     const Text(
                       'Ordenes',
                       style: TextStyle(
-                          fontSize: 35,
-                          color: Colors.white,
+                          fontSize: 30,
                           fontWeight: FontWeight.bold),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 30),
-                          child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                if (MenuStates == false) {
-                                  MenuStates = true;
-                                } else {
-                                  MenuStates = false;
-                                }
-                              });
-                            },
-                            child: const SizedBox(
-                              width: 100,
-                              child: Row(
-                                children: [
-                                  Text(
-                                    'Estados',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 10),
-                                    child: Icon(
-                                      Icons.remove_red_eye_sharp,
-                                      color: Colors.white,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 30),
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  if (MenuStates == false) {
+                                    MenuStates = true;
+                                  } else {
+                                    MenuStates = false;
+                                  }
+                                });
+                              },
+                              child: SizedBox(
+                                width: 100,
+                                child: Row(
+                                  children: [
+                                    const Text(
+                                      'Estados',
                                     ),
-                                  ),
-                                ],
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Icon(
+                                        Icons.remove_red_eye_sharp,
+                                        color: Theme.of(context).textTheme.bodyMedium?.color,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              right: 15, bottom: 20, top: 20),
-                          child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                if (CalendarMenu == false) {
-                                  CalendarMenu = true;
-                                } else {
-                                  CalendarMenu = false;
-                                }
-                              });
-                            },
-                            child: const SizedBox(
-                              width: 100,
-                              child: Row(
-                                children: [
-                                  Text(
-                                    'Fecha',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 10),
-                                    child: Icon(
-                                      Icons.calendar_month,
-                                      color: Colors.white,
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                right: 15,),
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  if (CalendarMenu == false) {
+                                    CalendarMenu = true;
+                                  } else {
+                                    CalendarMenu = false;
+                                  }
+                                });
+                              },
+                              child: SizedBox(
+                                width: 100,
+                                child: Row(
+                                  children: [
+                                    const Text(
+                                      'Fecha',
                                     ),
-                                  ),
-                                ],
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 10),
+                                      child: Icon(
+                                        Icons.calendar_month,
+                                        color: Theme.of(context).textTheme.bodyMedium?.color,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     Expanded(
                       child: SingleChildScrollView(
@@ -384,18 +366,15 @@ class _OrdersDesktopState extends State<OrdersDesktop> {
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 15),
-                                        child: Align(
-                                          alignment: Alignment.centerRight,
-                                          child: Padding(
-                                            padding:
-                                            const EdgeInsets.only(right: 35),
-                                            child: Text(
-                                              entry.key,
-                                              style: const TextStyle(
-                                                  color: Colors.grey, fontSize: 18),
-                                            ),
+                                      Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Padding(
+                                          padding:
+                                          const EdgeInsets.only(right: 35),
+                                          child: Text(
+                                            entry.key,
+                                            style: const TextStyle(
+                                                color: Colors.grey, fontSize: 15),
                                           ),
                                         ),
                                       ),
@@ -439,102 +418,77 @@ class _OrdersDesktopState extends State<OrdersDesktop> {
                                                   },
                                                   child: Padding(
                                                     padding: const EdgeInsets.only(
-                                                        left: 10,
-                                                        right: 10,
                                                         top: 5),
                                                     child: Container(
                                                       height: 90,
-                                                      width: 350,
+                                                      width: 370,
                                                       decoration: BoxDecoration(
-                                                        color: Colors.white,
+                                                        color: Theme.of(context).colorScheme.onPrimary,
                                                         borderRadius:
                                                         BorderRadius.circular(
                                                             5),
-                                                        boxShadow: const <BoxShadow>[
+                                                        boxShadow: <BoxShadow>[
                                                           BoxShadow(
-                                                              color: Colors.black54,
-                                                              blurRadius: 2.0,
+                                                              color:  Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+                                                              blurRadius: 3,
                                                               offset:
-                                                              Offset(0.2, 0.2))
+                                                              const Offset(1, 1))
                                                         ],
                                                       ),
                                                       child: Padding(
                                                         padding:
-                                                        const EdgeInsets.all(5),
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
+                                                        const EdgeInsets.all(10),
+                                                        child: Column(
+                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                           children: [
-                                                            Padding(
-                                                              padding:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  left: 10),
-                                                              child: Column(
-                                                                mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceAround,
-                                                                crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                                children: [
-                                                                  Text(
-                                                                    '${order['name']} ${order['last_name']}',
-                                                                    style: const TextStyle(
-                                                                        fontSize:
-                                                                        20,
-                                                                        fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
-                                                                  ),
-                                                                  Column(
-                                                                    crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .start,
-                                                                    children: [
-                                                                      Text(
-                                                                          'País: ${order['country']}'),
-                                                                      Padding(
-                                                                        padding: const EdgeInsets
-                                                                            .only(
-                                                                            top: 2),
-                                                                        child: Text(
-                                                                            'Región: ${order['region']}'),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ],
-                                                              ),
+                                                            Row(
+                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                              children: [
+                                                                Text(
+                                                                  '${order['name']} ${order['last_name']}',
+                                                                  style: const TextStyle(
+                                                                      fontSize:
+                                                                      16,
+                                                                      fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                                ),
+                                                                Container(
+                                                                  height: 10,
+                                                                  width: 10,
+                                                                  decoration: BoxDecoration(
+                                                                      shape: BoxShape
+                                                                          .circle,
+                                                                      color:
+                                                                      containerColor),
+                                                                ),
+                                                              ],
                                                             ),
-                                                            Padding(
-                                                              padding:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  right: 10,
-                                                                  top: 5,
-                                                                  bottom: 5),
-                                                              child: Column(
-                                                                crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .end,
-                                                                mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                                children: [
-                                                                  Container(
-                                                                    height: 10,
-                                                                    width: 10,
-                                                                    decoration: BoxDecoration(
-                                                                        shape: BoxShape
-                                                                            .circle,
-                                                                        color:
-                                                                        containerColor),
-                                                                  ),
-                                                                  Text(
-                                                                      '${DateFormat.yMMMd().add_jm().format(dateTime)}'),
-                                                                ],
-                                                              ),
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                                              children: [
+                                                                Column(
+                                                                  crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                                  children: [
+                                                                    Text(
+                                                                        'País: ${order['country']}'),
+                                                                    Padding(
+                                                                      padding: const EdgeInsets
+                                                                          .only(
+                                                                          top: 2),
+                                                                      child: Text(
+                                                                          'Región: ${order['region']}'),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                Text(
+                                                                    '${DateFormat.yMMMd().add_jm().format(dateTime)}'),
+                                                              ],
                                                             ),
                                                           ],
                                                         ),
@@ -559,83 +513,86 @@ class _OrdersDesktopState extends State<OrdersDesktop> {
                   ],
                 ),
                 Positioned(
-                  top: 140,
-                  right: 30,
+                  top: 100,
+                  right: 12,
                   child: CalendarMenu == true
                       ? Container(
-                          width: 320,
+                          width: 340,
+                          height: 250,
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Theme.of(context).colorScheme.primary,
                             borderRadius: BorderRadius.circular(3),
-                            boxShadow: const <BoxShadow>[
+                            boxShadow: <BoxShadow>[
                               BoxShadow(
-                                  color: Colors.black54,
+                                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
                                   blurRadius: 1.5,
-                                  offset: Offset(0.2, 0.2))
+                                  offset: const Offset(0.2, 0.2))
                             ],
                           ),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Padding(
-                                    padding: EdgeInsets.only(
-                                        left: 20, top: 13),
-                                    child: Text(
-                                      'Seleccionar dia',
-                                      style: TextStyle(fontSize: 20),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Padding(
+                                      padding: EdgeInsets.only(
+                                          left: 20, top: 13),
+                                      child: Text(
+                                        'Seleccionar dia',
+                                        style: TextStyle(fontSize: 15),
+                                      ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        right: 20, top: 10),
-                                    child: InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          _selectedDay = null;
-                                          CalendarMenu = false;
-                                        });
-                                      },
-                                      child: Container(
-                                        height: 25,
-                                        width: 50,
-                                        decoration: BoxDecoration(
-                                          color: Colors.black87,
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                        ),
-                                        child: const Center(
-                                          child: Text(
-                                            'Todo',
-                                            style:
-                                                TextStyle(color: Colors.white),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          right: 20, top: 10),
+                                      child: InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            _selectedDay = null;
+                                            CalendarMenu = false;
+                                          });
+                                        },
+                                        child: Container(
+                                          height: 25,
+                                          width: 50,
+                                          decoration: BoxDecoration(
+                                            color: Colors.black87,
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                          child: const Center(
+                                            child: Text(
+                                              'Todo',
+                                              style:
+                                                  TextStyle(color: Colors.white),
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              _CalendarMenu(),
-                            ],
+                                  ],
+                                ),
+                                calendarMenu(),
+                              ],
+                            ),
                           ))
                       : const SizedBox(),
                 ),
                 Positioned(
-                  top: 140,
-                  left: 25,
+                  top: 100,
+                  left: 12,
                   child: MenuStates == true
                       ? Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(5),
-                            boxShadow: const <BoxShadow>[
+                            boxShadow: <BoxShadow>[
                               BoxShadow(
-                                  color: Colors.black54,
+                                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
                                   blurRadius: 2.0,
-                                  offset: Offset(0.2, 0.2))
+                                  offset: const Offset(0.2, 0.2))
                             ],
                           ),
                           child: _menuStates())
