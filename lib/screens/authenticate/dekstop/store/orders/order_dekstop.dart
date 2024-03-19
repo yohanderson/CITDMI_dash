@@ -1,9 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 import '../../../../../bloc/dates_state_bloc.dart';
+import '../shop_desktop_panel.dart';
 
 
 class OrderDesktop extends StatefulWidget {
@@ -60,88 +63,140 @@ class _OrderDesktopState extends State<OrderDesktop> {
     }
   }
 
-  List<Map<String, dynamic>> states = [
-    {'state': 'Nueva orden', 'color': Colors.green},
-    {'state': 'Retrasado', 'color': Colors.orange},
-    {'state': 'Cancelado', 'color': Colors.red},
-    {'state': 'Pedido Realizado', 'color': Colors.blue}
+  static List<Map<String, dynamic>> statesMenu = [
+    {
+      'state': 'Reserva agendada',
+      'gradient': LinearGradient(
+        colors: [Colors.greenAccent.shade700, Colors.greenAccent],
+        stops: const [0.1, 0.9],
+      ),
+    },
+    {
+      'state': 'Expiró',
+      'gradient': const LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [Colors.yellow, Colors.orange],
+        stops: [0.0, 0.5],
+      ),
+    },
+    {
+      'state': 'Cancelado',
+      'gradient': LinearGradient(
+        colors: [Colors.red.shade200, Colors.red],
+        stops: [0.1, 0.9],
+      ),
+    },
+    {
+      'state': 'Atendido',
+      'gradient': const LinearGradient(
+        colors: [Colors.cyan, Colors.blue],
+        stops: [0.1, 0.9],
+      ),
+    }
   ];
+
 
   String state = '';
 
   @override
   Widget build(BuildContext context) {
 
+    ShopDekstopPanelState shopDekstopPanelState =  Provider.of<ShopDekstopPanelState>(context);
 
-    return Scaffold(
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              Container(
-                height: 150,
-                decoration: const BoxDecoration(
-                    color: Colors.black87,
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(20),
-                      bottomRight: Radius.circular(20),
-                    )),
-              ),
-              Expanded(
-                child: Container(
-                  color: Theme.of(context).colorScheme.onSurface
-                ),
-              ),
-            ],
+    return Container(
+      height: 390,
+      width: 550,
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primary,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
+            spreadRadius: 0.2,
+            blurRadius:20,
+            offset: const Offset(10, 8),
           ),
-          ValueListenableBuilder<List<Map<String, dynamic>>>(
-              valueListenable:
-              Provider.of<ConnectionDatesBlocs>(context).orders,
-              builder: (context, value, child) {
+        ],
+      ),
+      child: ValueListenableBuilder<List<Map<String, dynamic>>>(
+          valueListenable:
+          Provider.of<ConnectionDatesBlocs>(context).orders,
+          builder: (context, value, child) {
 
-                orderView = value.firstWhere((order) => order['order_id'] == widget.order['order_id']);
+            orderView = value.firstWhere((order) => order['order_id'] == widget.order['order_id']);
 
-                state = orderView['state'].toString();
+            state = orderView['state'].toString();
 
-                Color containerColor;
 
-                final timestamp = orderView['created_at'];
-                final dateTime = DateTime.parse(timestamp);;
+            final timestamp = orderView['created_at'];
+            final dateTime = DateTime.parse(timestamp);;
 
-                switch (state) {
-                  case 'Retrasado':
-                    containerColor = Colors.orange;
-                    break;
-                  case 'Pedido Realizado':
-                    containerColor = Colors.blue;
-                    break;
-                  case 'Cancelado':
-                    containerColor = Colors.red;
-                    break;
-                  default:
-                    containerColor = Colors.green[300]!;
-                }
+            Gradient containerColor;
 
-                return Column(
+            switch (state) {
+              case 'Expiró':
+                containerColor =
+                statesMenu[1]['gradient'];
+                break;
+              case 'Atendido':
+                containerColor =
+                statesMenu[2]['gradient'];
+                break;
+              case 'Cancelado':
+                containerColor =
+                statesMenu[3]['gradient'];
+                break;
+              default:
+                containerColor =
+                statesMenu[0]['gradient'];
+            }
+
+            return SingleChildScrollView(
+              child: Column(
                 children: [
-                  const SizedBox(
-                    height: 50,
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20, left: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(onPressed: ()  {
+                          shopDekstopPanelState.goBack();
+                        },
+                          icon: Container(
+                              height: 30,
+                              width: 30,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Theme.of(context).colorScheme.onPrimary
+                              ),
+                              child: const Center(child: Padding(
+                                padding: EdgeInsets.only(right: 3),
+                                child: Icon(Icons.arrow_back_ios_rounded, size: 20,),
+                              ))),
+                        ),
+                        const Text('Orden',
+                          style: TextStyle(
+                            fontSize: 40,
+                          ),),
+                        const SizedBox(
+                          width: 50,
+                        )
+                      ],
+                    ),
                   ),
-                  const Text('Orden',
-                  style: TextStyle(
-                    fontSize: 40,
-                  ),),
                   Padding(
                     padding: const EdgeInsets.only(top: 25, right: 25, left: 25),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.onPrimary,
                         borderRadius: BorderRadius.circular(5),
-                        boxShadow: const <BoxShadow>[
+                        boxShadow: [
                           BoxShadow(
-                              color: Colors.black54,
-                              blurRadius: 2.0,
-                              offset: Offset(0.2, 0.2))
+                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
+                            blurRadius: 15,
+                            offset: const Offset(5, 5),
+                          ),
                         ],
                       ),
                       child: Padding(
@@ -162,10 +217,10 @@ class _OrderDesktopState extends State<OrderDesktop> {
                                       Padding(
                                         padding: const EdgeInsets.only( bottom: 10),
                                         child: Text('${orderView['name']} ${orderView['last_name']}',
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 25
-                                        ),),
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 25
+                                          ),),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.only(top: 3),
@@ -173,7 +228,7 @@ class _OrderDesktopState extends State<OrderDesktop> {
                                           children: [
                                             const Text('Empresa:',
                                               style: TextStyle(
-                                                fontWeight: FontWeight.bold
+                                                  fontWeight: FontWeight.bold
                                               ),),
                                             Text(' ${orderView['name_enterprise']}'),
                                           ],
@@ -185,7 +240,7 @@ class _OrderDesktopState extends State<OrderDesktop> {
                                           children: [
                                             const Text('País:',
                                               style: TextStyle(
-                                                fontWeight: FontWeight.bold
+                                                  fontWeight: FontWeight.bold
                                               ),),
                                             Text(' ${orderView['country']}'),
                                           ],
@@ -197,7 +252,7 @@ class _OrderDesktopState extends State<OrderDesktop> {
                                           children: [
                                             const Text('Región:',
                                               style: TextStyle(
-                                                fontWeight: FontWeight.bold
+                                                  fontWeight: FontWeight.bold
                                               ),),
                                             Text(' ${orderView['region']}'),
                                           ],
@@ -209,7 +264,7 @@ class _OrderDesktopState extends State<OrderDesktop> {
                                           children: [
                                             const Text('Dirección:',
                                               style: TextStyle(
-                                                fontWeight: FontWeight.bold
+                                                  fontWeight: FontWeight.bold
                                               ),),
                                             Text(' ${orderView['address']}'),
                                           ],
@@ -221,7 +276,7 @@ class _OrderDesktopState extends State<OrderDesktop> {
                                           children: [
                                             const Text('Dirección 2:',
                                               style: TextStyle(
-                                                fontWeight: FontWeight.bold
+                                                  fontWeight: FontWeight.bold
                                               ),),
                                             Text(' ${orderView['address_two']}'),
                                           ],
@@ -231,21 +286,9 @@ class _OrderDesktopState extends State<OrderDesktop> {
                                         padding: const EdgeInsets.only(top: 3),
                                         child: Row(
                                           children: [
-                                            const Text('Población:',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold
-                                              ),),
-                                            Text(' ${orderView['population']}'),
-                                          ],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 3),
-                                        child: Row(
-                                          children: [
                                             const Text('Código Postal:',
                                               style: TextStyle(
-                                                fontWeight: FontWeight.bold
+                                                  fontWeight: FontWeight.bold
                                               ),),
                                             Text(' ${orderView['code_postal']}'),
                                           ],
@@ -257,7 +300,7 @@ class _OrderDesktopState extends State<OrderDesktop> {
                                           children: [
                                             const Text('Población:',
                                               style: TextStyle(
-                                                fontWeight: FontWeight.bold
+                                                  fontWeight: FontWeight.bold
                                               ),),
                                             Text(' ${orderView['population']}'),
                                           ],
@@ -269,7 +312,7 @@ class _OrderDesktopState extends State<OrderDesktop> {
                                           children: [
                                             const Text('Teléfono:',
                                               style: TextStyle(
-                                                fontWeight: FontWeight.bold
+                                                  fontWeight: FontWeight.bold
                                               ),),
                                             Text(' ${orderView['phone_number']}'),
                                           ],
@@ -286,7 +329,7 @@ class _OrderDesktopState extends State<OrderDesktop> {
                                       height: 10,
                                       width: 10,
                                       decoration: BoxDecoration(
-                                        color: containerColor,
+                                        gradient: containerColor,
                                         shape: BoxShape.circle,
                                       ),
                                     ),
@@ -345,9 +388,9 @@ class _OrderDesktopState extends State<OrderDesktop> {
                     padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: states.map((state) {
+                      children: statesMenu.map((state) {
                         String stateText = state['state'];
-                        Color stateColor = state['color'];
+                        Gradient stateColor = state['gradient'];
                         return InkWell(
                           onTap: () {
                             showDialog(
@@ -374,7 +417,7 @@ class _OrderDesktopState extends State<OrderDesktop> {
                                               'estado': stateText
                                             },
                                           );
-
+              
                                           if (response.statusCode == 200) {
                                             Navigator.pop(context);
                                           } else {
@@ -419,48 +462,74 @@ class _OrderDesktopState extends State<OrderDesktop> {
                               },
                             );
                           },
-                          child: Container(
-                            height: 40,
-                            width: 80,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(width: 1, color: stateColor,),
-                            ),
-                            child: Center(
-                              child: Text(
-                                stateText,
-                                textAlign: TextAlign.center,
-                              ),
+                          child: SizedBox(
+                            height: 50,
+                            width: 100,
+                            child: Stack(
+                              children: [
+                                Positioned.fill(
+                                  child: Align(
+                                      alignment: Alignment.center,
+                                      child: Container(
+                                        height: 50,
+                                        width: 100,
+                                        decoration: BoxDecoration(
+                                          gradient: stateColor,
+                                            borderRadius: BorderRadius.circular(5),
+                                        ),
+
+                                      )),
+                                ),
+                                Positioned.fill(
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: Container(
+                                      height: 47,
+                                      width: 97,
+                                      decoration: BoxDecoration(
+                                        color: Theme.of(context).colorScheme.onPrimary,
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          stateText,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         );
-
+              
                       }).toList(),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 20),
+                    padding: const EdgeInsets.symmetric(vertical: 20),
                     child: Row(
                       children: [
                         const Spacer(),
                         const Text('Fecha del pedido:',
                           style: TextStyle(
-                            fontSize: 20,
-                              fontWeight: FontWeight.bold
-                          ),),
+                              fontWeight: FontWeight.bold,
+                            fontSize: 18
+                          ),
+                        ),
                         Text(' ${DateFormat.yMMMd().add_jm().format(dateTime)}',
-                        style: const TextStyle(
-                          fontSize: 20
-                        ),),
-                        const Spacer(),
+                          style: const TextStyle(
+                              fontSize: 18
+                          ),),
+                        const Spacer()
                       ],
                     ),
                   ),
                 ],
-              );
-            }
-          ),
-        ],
+              ),
+            );
+          }
       ),
     );
   }

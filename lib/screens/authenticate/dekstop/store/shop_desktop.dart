@@ -76,6 +76,8 @@ class _ShopDesktopViewState extends State<ShopDesktopView> {
     });
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return Container(

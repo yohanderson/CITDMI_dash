@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../../../../../bloc/dates_state_bloc.dart';
+import '../shop_desktop_panel.dart';
 import 'order_dekstop.dart';
 
 class OrdersDesktop extends StatefulWidget {
@@ -13,6 +14,7 @@ class OrdersDesktop extends StatefulWidget {
 }
 
 class _OrdersDesktopState extends State<OrdersDesktop> {
+
   @override
   void initState() {
     super.initState();
@@ -37,7 +39,7 @@ class _OrdersDesktopState extends State<OrdersDesktop> {
 
   int numOrders = 0;
   late DateTime? _selectedDay;
-  bool CalendarMenu = false;
+  bool calendarMenuActive = false;
 
   List<Map<String, dynamic>> statesMenu = [
     {'state': 'Nueva orden', 'color': Colors.green},
@@ -47,7 +49,7 @@ class _OrdersDesktopState extends State<OrdersDesktop> {
   ];
 
   String selectedState = 'Todo';
-  bool MenuStates = false;
+  bool menuStatesActive = false;
 
   Widget _menuStates() {
     return Padding(
@@ -62,7 +64,7 @@ class _OrdersDesktopState extends State<OrdersDesktop> {
             onTap: () {
               setState(() {
                 selectedState = 'Todo';
-                MenuStates = false;
+                menuStatesActive = false;
               });
             },
             child: Padding(
@@ -93,7 +95,7 @@ class _OrdersDesktopState extends State<OrdersDesktop> {
                 onTap: () {
                   setState(() {
                     selectedState = stateText;
-                    MenuStates = false;
+                    menuStatesActive = false;
                   });
                 },
                 child: Container(
@@ -133,9 +135,12 @@ class _OrdersDesktopState extends State<OrdersDesktop> {
 
   @override
   Widget build(BuildContext context) {
+
+    ShopDekstopPanelState shopDekstopPanelState =  Provider.of<ShopDekstopPanelState>(context);
+
     return Container(
-      height: 400,
-      width: 365,
+      height: 390,
+      width: 550,
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primary,
         borderRadius: BorderRadius.circular(20),
@@ -181,7 +186,7 @@ class _OrdersDesktopState extends State<OrdersDesktop> {
                   } else {
                     setState(() {
                       _selectedDay = selectedDay;
-                      CalendarMenu = false;
+                      calendarMenuActive = false;
                     });
                   }
                 },
@@ -267,10 +272,10 @@ class _OrdersDesktopState extends State<OrdersDesktop> {
                             child: InkWell(
                               onTap: () {
                                 setState(() {
-                                  if (MenuStates == false) {
-                                    MenuStates = true;
+                                  if (menuStatesActive == false) {
+                                    menuStatesActive = true;
                                   } else {
-                                    MenuStates = false;
+                                    menuStatesActive = false;
                                   }
                                 });
                               },
@@ -299,10 +304,10 @@ class _OrdersDesktopState extends State<OrdersDesktop> {
                             child: InkWell(
                               onTap: () {
                                 setState(() {
-                                  if (CalendarMenu == false) {
-                                    CalendarMenu = true;
+                                  if (calendarMenuActive == false) {
+                                    calendarMenuActive = true;
                                   } else {
-                                    CalendarMenu = false;
+                                    calendarMenuActive = false;
                                   }
                                 });
                               },
@@ -408,13 +413,11 @@ class _OrdersDesktopState extends State<OrdersDesktop> {
                                                     left: 20, right: 20, top: 10),
                                                 child: InkWell(
                                                   onTap: () {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            OrderDesktop(order: order),
-                                                      ),
+                                                    shopDekstopPanelState.changeValue(
+                                                            OrderDesktop(order: order)
                                                     );
+
+
                                                   },
                                                   child: Padding(
                                                     padding: const EdgeInsets.only(
@@ -427,12 +430,13 @@ class _OrdersDesktopState extends State<OrdersDesktop> {
                                                         borderRadius:
                                                         BorderRadius.circular(
                                                             5),
-                                                        boxShadow: <BoxShadow>[
+                                                        boxShadow: [
                                                           BoxShadow(
-                                                              color:  Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
-                                                              blurRadius: 3,
-                                                              offset:
-                                                              const Offset(1, 1))
+                                                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
+                                                            spreadRadius: 0.2,
+                                                            blurRadius:20,
+                                                            offset: const Offset(10, 8),
+                                                          ),
                                                         ],
                                                       ),
                                                       child: Padding(
@@ -487,7 +491,7 @@ class _OrdersDesktopState extends State<OrdersDesktop> {
                                                                   ],
                                                                 ),
                                                                 Text(
-                                                                    '${DateFormat.yMMMd().add_jm().format(dateTime)}'),
+                                                                    DateFormat.yMMMd().add_jm().format(dateTime)),
                                                               ],
                                                             ),
                                                           ],
@@ -515,7 +519,7 @@ class _OrdersDesktopState extends State<OrdersDesktop> {
                 Positioned(
                   top: 100,
                   right: 12,
-                  child: CalendarMenu == true
+                  child: calendarMenuActive == true
                       ? Container(
                           width: 340,
                           height: 250,
@@ -551,7 +555,7 @@ class _OrdersDesktopState extends State<OrdersDesktop> {
                                         onTap: () {
                                           setState(() {
                                             _selectedDay = null;
-                                            CalendarMenu = false;
+                                            calendarMenuActive = false;
                                           });
                                         },
                                         child: Container(
@@ -583,7 +587,7 @@ class _OrdersDesktopState extends State<OrdersDesktop> {
                 Positioned(
                   top: 100,
                   left: 12,
-                  child: MenuStates == true
+                  child: menuStatesActive == true
                       ? Container(
                           decoration: BoxDecoration(
                             color: Colors.white,

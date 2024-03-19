@@ -80,7 +80,7 @@ class ReservesDesktopState extends State<ReservesDesktop> {
 
 
   late ValueNotifier<Widget> currentViewList;
-  List<Widget> history = []; // Para mantener un historial de widgets
+  List<Widget> history = [];
 
   @override
   void didChangeDependencies() {

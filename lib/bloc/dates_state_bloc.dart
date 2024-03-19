@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-const ipPort = '//192.168.1.101:3263';
+const ipPort = '//192.168.1.105:3263';
 
 class ConnectionDatesBlocs extends ChangeNotifier {
 
